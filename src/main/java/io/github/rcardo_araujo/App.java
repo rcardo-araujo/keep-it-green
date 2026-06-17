@@ -1,4 +1,4 @@
-package io.github.rcardo-araujo;
+package io.github.rcardo_araujo;
 
 /**
  * Hello world!
