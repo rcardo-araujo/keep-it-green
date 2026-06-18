@@ -1,6 +1,7 @@
 package io.github.rcardo_araujo;
 
 import io.github.rcardo_araujo.AppConfig;
+import io.github.rcardo_araujo.GitService;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,6 +29,8 @@ public class Main {
         } catch(IOException exception) {
             exception.printStackTrace();
         }
+
+        GitService gitService = new GitService();
 
         for (String repo: appConfig.getReposToWatch()) {
             try {    
@@ -59,6 +62,12 @@ public class Main {
 
                 for (String line: terminalLines) {
                     System.out.println(line);
+
+                    String[] commitArguments = line.split(" ", 2);
+                    String commitDate = commitArguments[0];
+                    String commitMessage = commitArguments[1];
+
+                    gitService.commit(appConfig.getDummyRepoPath(), commitMessage, commitDate);
                 }
 
                 System.out.println("\nProcess finished with code: " + exitCode);
