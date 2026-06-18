@@ -1,6 +1,6 @@
 package io.github.rcardo_araujo;
 
-import io.github.rcardo_araujo.Config;
+import io.github.rcardo_araujo.AppConfig;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,7 +16,7 @@ public class Main {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(configPath));
 
-            Config config = gson.fromJson(reader, Config.class);
+            AppConfig appConfig = gson.fromJson(reader, AppConfig.class);
         } catch(IOException exception) {
             exception.printStackTrace();
         }

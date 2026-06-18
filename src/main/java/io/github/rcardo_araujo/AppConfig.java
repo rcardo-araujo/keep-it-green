@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Config {
+public class AppConfig {
     private String authorEmail;
     private String dummyRepoPath;
     private ArrayList<String> reposToWatch;
