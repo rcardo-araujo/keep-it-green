@@ -13,12 +13,15 @@ public class GitService {
                 "commit",
                 "--allow-empty",
                 "-m",
-                (message != null) ? message : "ghost commit"
+                (message != null) ? message : "ghost commit",
+                "--date=" + date
             ).directory(new File(directory));
 
             Process process = processBuilder.start();
 
-        } catch (IOException exception) {
+            int exitCode = process.waitFor();
+
+        } catch (IOException | InterruptedException exception) {
             exception.printStackTrace();
         }
     }
