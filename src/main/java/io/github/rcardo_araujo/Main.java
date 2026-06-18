@@ -38,7 +38,8 @@ public class Main {
                     "log", 
                     "--author=" + appConfig.getAuthorEmail(),
                     "--since=" + sinceDate,
-                    "--oneline"
+                    "--oneline",
+                    "--no-decorator"
                 ).directory(new File(repo));
 
                 Process process = processBuilder.start();
