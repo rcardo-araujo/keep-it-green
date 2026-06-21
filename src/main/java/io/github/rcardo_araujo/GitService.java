@@ -40,7 +40,7 @@ public class GitService {
         return terminalLines;
     }
 
-    public void commit(String directory, String message, String date) {
+    public void commit(String repository, String message, String date) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(
                 "git",
@@ -49,7 +49,7 @@ public class GitService {
                 "-m",
                 (message != null) ? message : "ghost commit",
                 "--date=" + date
-            ).directory(new File(directory));
+            ).directory(new File(repository));
 
             Process process = processBuilder.start();
 
@@ -60,17 +60,17 @@ public class GitService {
         }
     }
 
-    public void push(String directory) {
+    public void push(String repository) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(
                 "git",
                 "push"
-            ).directory(new File(directory));
+            ).directory(new File(repository));
 
             Process process = processBuilder.start();
 
             int exitCode = process.waitFor();
-            
+
         } catch (IOException | InterruptedException exception) {
             exception.printStackTrace();
         }
