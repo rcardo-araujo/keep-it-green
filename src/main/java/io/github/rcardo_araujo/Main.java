@@ -1,17 +1,14 @@
 package io.github.rcardo_araujo;
 
-import io.github.rcardo_araujo.AppConfig;
-import io.github.rcardo_araujo.GitService;
-
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.InterruptedException;
-import java.lang.Process;
-import java.lang.ProcessBuilder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
+
 import com.google.gson.Gson;
 
 public class Main {
@@ -30,10 +27,39 @@ public class Main {
             exception.printStackTrace();
         }
 
+        Path lastSyncPath = Paths.get("last_sync.txt");
+        String sinceDate = "";
+
+        if (!Files.exists(lastSyncPath)) {
+            try {
+                Files.createFile(lastSyncPath);
+
+                sinceDate = "yesterday";
+
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        } else {
+            try {
+                sinceDate = Files.readString(lastSyncPath).trim();
+
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        try {
+            String syncTimestamp = OffsetDateTime.now().toString();
+            Files.writeString(lastSyncPath, syncTimestamp);
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
         GitService gitService = new GitService();
 
         for (String repo: appConfig.getReposToWatch()) {
-            ArrayList<String> logs = gitService.getLog(repo, appConfig.getAuthorEmail());
+            ArrayList<String> logs = gitService.getLog(repo, appConfig.getAuthorEmail(), sinceDate);
 
             for (String log: logs) {
                 String[] commitArguments = log.split(" ", 2);
