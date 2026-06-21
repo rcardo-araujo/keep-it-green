@@ -41,6 +41,7 @@ public class Main {
                 String commitMessage = commitArguments[1];
 
                 gitService.commit(appConfig.getDummyRepoPath(), commitMessage, commitDate);
+                gitService.push(appConfig.getDummyRepoPath());
             }
         }
     }

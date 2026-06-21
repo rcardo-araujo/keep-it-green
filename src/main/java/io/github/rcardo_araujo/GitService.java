@@ -63,4 +63,19 @@ public class GitService {
             exception.printStackTrace();
         }
     }
+
+    public void push(String directory) {
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(
+                "git",
+                "push"
+            ).directory(new File(directory));
+
+            Process process = processBuilder.start();
+
+            int exitCode = process.waitFor();
+        } catch (IOException | InterruptedException exception) {
+            exception.printStackTrace();
+        }
+    }
 }
