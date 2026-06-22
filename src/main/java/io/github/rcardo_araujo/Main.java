@@ -34,7 +34,7 @@ public class Main {
             try {
                 Files.createFile(lastSyncPath);
 
-                sinceDate = "yesterday";
+                sinceDate = "2026-06-01T00:00:00-03:00";
 
             } catch (IOException exception) {
                 exception.printStackTrace();
