@@ -56,18 +56,18 @@ public class KeepItGreenApp {
             exception.printStackTrace();
         }
 
-        GitClient gitService = new GitClient();
+        GitClient gitClient = new GitClient();
 
         for (String repo: appConfig.getSourceRepoPaths()) {
-            ArrayList<String> logs = gitService.fetchCommits(repo, appConfig.getAuthorEmail(), sinceDate);
+            ArrayList<String> logs = gitClient.fetchCommits(repo, appConfig.getAuthorEmail(), sinceDate);
 
             for (String log: logs) {
                 String[] commitArguments = log.split(" ", 2);
                 String commitDate = commitArguments[0];
                 String commitMessage = commitArguments[1];
 
-                gitService.commitEmpty(appConfig.getDestinationRepoPath(), commitMessage, commitDate);
-                gitService.push(appConfig.getDestinationRepoPath());
+                gitClient.commitEmpty(appConfig.getDestinationRepoPath(), commitMessage, commitDate);
+                gitClient.push(appConfig.getDestinationRepoPath());
             }
         }
     }
