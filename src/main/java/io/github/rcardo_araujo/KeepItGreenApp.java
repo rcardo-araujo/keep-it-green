@@ -67,8 +67,9 @@ public class KeepItGreenApp {
                 String commitMessage = commitArguments[1];
 
                 gitClient.commitEmpty(appConfig.getDestinationRepoPath(), commitMessage, commitDate);
-                gitClient.push(appConfig.getDestinationRepoPath());
             }
         }
+
+        gitClient.push(appConfig.getDestinationRepoPath());
     }
 }
