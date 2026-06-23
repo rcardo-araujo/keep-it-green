@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class GitClient {
-    public ArrayList<String> getLog(String repository, String author, String sinceDate) {
+    public ArrayList<String> fetchCommits(String repository, String author, String sinceDate) {
         ArrayList<String> terminalLines = new ArrayList<String>();
 
         try {    
@@ -40,7 +40,7 @@ public class GitClient {
         return terminalLines;
     }
 
-    public void commit(String repository, String message, String date) {
+    public void commitEmpty(String repository, String message, String date) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(
                 "git",

@@ -59,14 +59,14 @@ public class KeepItGreenApp {
         GitClient gitService = new GitClient();
 
         for (String repo: appConfig.getReposToWatch()) {
-            ArrayList<String> logs = gitService.getLog(repo, appConfig.getAuthorEmail(), sinceDate);
+            ArrayList<String> logs = gitService.fetchCommits(repo, appConfig.getAuthorEmail(), sinceDate);
 
             for (String log: logs) {
                 String[] commitArguments = log.split(" ", 2);
                 String commitDate = commitArguments[0];
                 String commitMessage = commitArguments[1];
 
-                gitService.commit(appConfig.getDummyRepoPath(), commitMessage, commitDate);
+                gitService.commitEmpty(appConfig.getDummyRepoPath(), commitMessage, commitDate);
                 gitService.push(appConfig.getDummyRepoPath());
             }
         }
