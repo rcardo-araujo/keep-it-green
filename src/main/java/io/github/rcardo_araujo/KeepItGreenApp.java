@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
-public class Main {
+public class KeepItGreenApp {
     public static void main(String[] args) {
         final String configPath = "config.json";
 
@@ -56,7 +56,7 @@ public class Main {
             exception.printStackTrace();
         }
 
-        GitService gitService = new GitService();
+        GitClient gitService = new GitClient();
 
         for (String repo: appConfig.getReposToWatch()) {
             ArrayList<String> logs = gitService.getLog(repo, appConfig.getAuthorEmail(), sinceDate);

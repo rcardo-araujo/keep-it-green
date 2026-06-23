@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class GitService {
+public class GitClient {
     public ArrayList<String> getLog(String repository, String author, String sinceDate) {
         ArrayList<String> terminalLines = new ArrayList<String>();
 

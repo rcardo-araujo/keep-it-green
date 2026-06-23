@@ -46,7 +46,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.1.0</version>
         <configuration>
-          <mainClass>io.github.rcardo_araujo.Main</mainClass>
+          <mainClass>io.github.rcardo_araujo.KeepItGreenApp</mainClass>
         </configuration>
       </plugin>
     </plugins>
