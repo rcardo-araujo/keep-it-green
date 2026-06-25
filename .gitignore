@@ -1,0 +1,7 @@
+target/
+*.class
+*.jar
+
+config.json
+last_sync.txt
+*.log
