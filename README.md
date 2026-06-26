@@ -83,6 +83,11 @@ Para que os quadradinhos verdes apareçam no seu perfil, o repositório local on
 > [!WARNING]
 > Se a sua máquina de trabalho já está configurada com a conta do GitHub da sua instituição, consulte o [**Guia de Autenticação Multi-contas (AUTH_GITHUB.md)**](./AUTH_GITHUB.md) para configurar o acesso seguro ao seu repositório pessoal.
 
+3. Entre na pasta clonada e configure o seu e-mail pessoal vinculado ao GitHub:
+   ```bash
+   git config --local user.email "seu-email-pessoal@email.com"
+   ```
+
 #### Configurar o `config.json`
 
 Copie o arquivo de exemplo fornecido no projeto:
