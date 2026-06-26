@@ -134,8 +134,6 @@ java -jar target/keep-it-green-1.0-SNAPSHOT.jar
 
 Para verificar se os commits foram criados, basta verificar o log (`git log --oneline`) do seu repositório *dummy* local.
 
----
-
 #### Agendar com o Crontab
 
 Para que a sincronização aconteça automaticamente, vamos configurar o agendador do Linux.
