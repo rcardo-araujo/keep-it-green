@@ -83,6 +83,11 @@ Para que os quadradinhos verdes apareçam no seu perfil, o repositório local on
 > [!WARNING]
 > Se a sua máquina de trabalho já está configurada com a conta do GitHub da sua instituição, consulte o [**Guia de Autenticação Multi-contas (AUTH_GITHUB.md)**](./AUTH_GITHUB.md) para configurar o acesso seguro ao seu repositório pessoal.
 
+3. Entre na pasta clonada e configure o seu e-mail pessoal vinculado ao GitHub:
+   ```bash
+   git config --local user.email "seu-email-pessoal@email.com"
+   ```
+
 #### Configurar o `config.json`
 
 Copie o arquivo de exemplo fornecido no projeto:
@@ -124,17 +129,15 @@ mvn clean package
 
 Após o comando finalizar com sucesso (`BUILD SUCCESS`), o arquivo executável estará disponível em:
 ```
-target/keep-it-green-1.0-SNAPSHOT-jar-with-dependencies.jar
+target/keep-it-green-1.0-SNAPSHOT.jar
 ```
 
 Para testar se tudo está funcionando corretamente, execute manualmente uma vez:
 ```bash
-java -jar target/keep-it-green-1.0-SNAPSHOT-jar-with-dependencies.jar
+java -jar target/keep-it-green-1.0-SNAPSHOT.jar
 ```
 
 Para verificar se os commits foram criados, basta verificar o log (`git log --oneline`) do seu repositório *dummy* local.
-
----
 
 #### Agendar com o Crontab
 
@@ -154,7 +157,7 @@ crontab -e
 Adicione a seguinte linha ao final do arquivo, ajustando os caminhos conforme a sua máquina. O exemplo abaixo configura a execução **a cada 3 horas entre 9h e 22h**:
 
 ```text
-0 9-22/3 * * * cd /home/usuario/keep-it-green && /usr/bin/java -jar target/keep-it-green-1.0-SNAPSHOT-jar-with-dependencies.jar >> sync.log 2>&1
+0 9-22/3 * * * cd /home/usuario/keep-it-green && /usr/bin/java -jar target/keep-it-green-1.0-SNAPSHOT.jar >> sync.log 2>&1
 ```
 
 > [!IMPORTANT]
