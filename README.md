@@ -124,12 +124,12 @@ mvn clean package
 
 Após o comando finalizar com sucesso (`BUILD SUCCESS`), o arquivo executável estará disponível em:
 ```
-target/keep-it-green-1.0-SNAPSHOT-jar-with-dependencies.jar
+target/keep-it-green-1.0-SNAPSHOT.jar
 ```
 
 Para testar se tudo está funcionando corretamente, execute manualmente uma vez:
 ```bash
-java -jar target/keep-it-green-1.0-SNAPSHOT-jar-with-dependencies.jar
+java -jar target/keep-it-green-1.0-SNAPSHOT.jar
 ```
 
 Para verificar se os commits foram criados, basta verificar o log (`git log --oneline`) do seu repositório *dummy* local.
@@ -154,7 +154,7 @@ crontab -e
 Adicione a seguinte linha ao final do arquivo, ajustando os caminhos conforme a sua máquina. O exemplo abaixo configura a execução **a cada 3 horas entre 9h e 22h**:
 
 ```text
-0 9-22/3 * * * cd /home/usuario/keep-it-green && /usr/bin/java -jar target/keep-it-green-1.0-SNAPSHOT-jar-with-dependencies.jar >> sync.log 2>&1
+0 9-22/3 * * * cd /home/usuario/keep-it-green && /usr/bin/java -jar target/keep-it-green-1.0-SNAPSHOT.jar >> sync.log 2>&1
 ```
 
 > [!IMPORTANT]
