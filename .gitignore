@@ -1,7 +1,6 @@
-target/
-*.class
-*.jar
-
-config.json
-last_sync.txt
-*.log
+node_modules
+dist
+out
+.DS_Store
+.eslintcache
+*.log*
