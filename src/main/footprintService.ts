@@ -1,19 +1,8 @@
+import { LanguageProfile } from "./models/LanguageProfile";
+import { SupportedLanguages } from "./registry/SupportedLanguages";
+
 import * as fs from "fs/promises";
 import * as path from "path";
-
-interface LanguageProfile {
-    footprint: string,
-    file: string
-};
-
-const typescriptProfile: LanguageProfile = {
-    footprint: `{ const _step = "tracked! kept it green" };\n`,
-    file: "footprints.ts"
-}
-
-const SupportedLanguages: Record<string, LanguageProfile> = {
-    "typescript": typescriptProfile
-};
 
 export async function appendFootprintsFile(languageProfile: LanguageProfile, repository: string, quantity: number): Promise<void> {
     const footprintsFilePath = path.join(repository, languageProfile.file);
