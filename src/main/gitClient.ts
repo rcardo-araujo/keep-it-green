@@ -15,6 +15,21 @@ class CommitData {
 
 const execAsync = promisify(exec);
 
+export async function stageChanges(repository: string): Promise<void> {
+    const command = `git add .`;
+
+    try {
+        const { stderr } = await execAsync(command, { cwd: repository });
+
+        if (stderr) {
+            console.warn("Git info: ", stderr);
+        }
+    } catch(error) {
+        console.log("Git error: ", error);
+        throw(error)
+    }
+}
+
 export async function fetchCommits(repository: string, author: string, sinceDate: string): Promise<CommitData[]> {
     const command = `git --no-pager log --author="${author}" --since="${sinceDate}" --numstat --pretty=format:"date=%ad message=%s" --date=short`;
 
