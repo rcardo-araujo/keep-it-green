@@ -62,6 +62,21 @@ export async function emptyCommit(repository: string, message: string | null, da
     }
 }
 
+export async function pushCommits(repository: string): Promise<void> {
+    const command = `git push`;
+
+    try {
+        const { stderr } = await execAsync(command, { cwd: repository });
+
+        if (stderr) {
+            console.warn("Git info: ", stderr);
+        }
+    } catch (error) {
+        console.log(error);
+        throw(error);
+    }
+}
+
 function extractCommitData(log: string): CommitData[] {
     const commits: CommitData[] = [];
     const lines: string[] = log.split("\n");
