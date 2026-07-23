@@ -6,13 +6,13 @@ interface LanguageProfile {
     file: string
 };
 
-const tsProfile: LanguageProfile = {
+const typescriptProfile: LanguageProfile = {
     footprint: `{ const _step = "tracked! kept it green" };\n`,
     file: "footprints.ts"
 }
 
-const LanguageProfileDict: Record<string, LanguageProfile> = {
-    "typescript": tsProfile
+const SupportedLanguages: Record<string, LanguageProfile> = {
+    "typescript": typescriptProfile
 };
 
 export async function appendFootprintsFile(languageProfile: LanguageProfile, repository: string, quantity: number): Promise<void> {
@@ -31,7 +31,7 @@ export async function appendFootprintsFile(languageProfile: LanguageProfile, rep
 export async function leaveFootprints(language: string, repository: string, quantity: number): Promise<void> {
     if (quantity <= 0) return;
 
-    const languageProfile = LanguageProfileDict[language];
+    const languageProfile = SupportedLanguages[language];
 
     if (!languageProfile) {
         console.log("Language not supported");
