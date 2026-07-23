@@ -1,18 +1,15 @@
-import { getSyncProfile, getLastSyncDate, updateLastSyncDate } from "./configManager";
+import { updateLastSyncDate, SyncProfile } from "./configManager";
 import { emptyCommit, fetchCommits, pushCommits } from "./gitClient";
 
-export async function runSync() {
+export async function runSync(syncProfile: SyncProfile, lastSyncDate: string) {
     try {
-        const syncProfile = getSyncProfile();
-        const lastSyncDate = getLastSyncDate();
-
         await updateLastSyncDate();
 
         for (const repo of syncProfile.sourceRepoPaths) {
             const commits = await fetchCommits(repo, syncProfile.authorEmail, lastSyncDate); 
 
             for (const commit of commits) {
-                await emptyCommit(repo, commit.message, commit.date);
+                await emptyCommit(syncProfile.destinationRepoPath, commit.message, commit.date);
             }
 
             await pushCommits(repo);
