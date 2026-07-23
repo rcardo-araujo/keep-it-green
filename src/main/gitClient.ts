@@ -48,7 +48,7 @@ export async function fetchCommits(repository: string, author: string, sinceDate
 }
 
 export async function emptyCommit(repository: string, message: string | null, date: string): Promise<void> {
-    const command = `git commit ${message ? '-m "${message}"' : "private commit message"} --date=${date}`;
+    const command = `git commit --allow-empty ${message ? `-m "${message}"` : "private commit message"} --date=${date}`;
 
     try {
         const { stderr } = await execAsync(command, { cwd: repository });
