@@ -7,7 +7,7 @@ const userDataPath = app.getPath("userData");
 const syncProfileFilePath = path.join(userDataPath, "sync_profile.json");
 const lastSyncFilePath = path.join(userDataPath, "last_sync.txt");
 
-interface SyncProfile {
+export interface SyncProfile {
     authorEmail: string,
     destinationRepoPath: string,
     sourceRepoPaths: string[]
