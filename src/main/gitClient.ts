@@ -47,6 +47,21 @@ export async function fetchCommits(repository: string, author: string, sinceDate
     }
 }
 
+export async function emptyCommit(repository: string, message: string | null, date: string): Promise<void> {
+    const command = `git commit ${message ? '-m "${message}"' : "private commit message"} --date=${date}`;
+
+    try {
+        const { stderr } = await execAsync(command, { cwd: repository });
+
+        if (stderr) {
+            console.warn("Git info: ", stderr);
+        }
+    } catch(error) {
+        console.log("Git error: ", error);
+        throw(error)
+    }
+}
+
 function extractCommitData(log: string): CommitData[] {
     const commits: CommitData[] = [];
     const lines: string[] = log.split("\n");
