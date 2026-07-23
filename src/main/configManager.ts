@@ -8,14 +8,18 @@ const syncProfileFilePath = path.join(userDataPath, "sync_profile.json");
 const lastSyncFilePath = path.join(userDataPath, "last_sync.txt");
 
 interface SyncProfile {
-    authorEmail?: string,
-    destinationRepoPath?: string,
-    sourceRepoPaths?: string[]
+    authorEmail: string,
+    destinationRepoPath: string,
+    sourceRepoPaths: string[]
 };
 
 export function initializeUserData(): void {
     if (!fs.existsSync(syncProfileFilePath)) {
-        const defaultSyncProfile: SyncProfile = {};
+        const defaultSyncProfile: SyncProfile = {
+            authorEmail: "",
+            destinationRepoPath: "",
+            sourceRepoPaths: []
+        };
 
         fs.writeFileSync(syncProfileFilePath, JSON.stringify(defaultSyncProfile, null, 4), "utf-8");
 
