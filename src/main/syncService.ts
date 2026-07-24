@@ -1,5 +1,6 @@
 import { updateLastSyncDate, SyncProfile } from "./configManager";
-import { emptyCommit, fetchCommits, pushCommits } from "./gitClient";
+import { leaveCommitFootprints } from "./footprintService";
+import { createCommit, fetchCommits, pushCommits, stageChanges } from "./gitClient";
 
 export async function runSync(syncProfile: SyncProfile, lastSyncDate: string) {
     try {
@@ -9,7 +10,9 @@ export async function runSync(syncProfile: SyncProfile, lastSyncDate: string) {
             const commits = await fetchCommits(repo, syncProfile.authorEmail, lastSyncDate); 
 
             for (const commit of commits) {
-                await emptyCommit(syncProfile.destinationRepoPath, commit.message, commit.date);
+                await leaveCommitFootprints(commit, syncProfile.destinationRepoPath);
+                await stageChanges(syncProfile.destinationRepoPath);
+                await createCommit(syncProfile.destinationRepoPath, commit.message, commit.date);
             }
 
             await pushCommits(repo);

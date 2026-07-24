@@ -1,11 +1,11 @@
 export class CommitData {
     date: string = "";
     message: string = "";
-    tsInsertions: number = 0;
+    insertions: Record<string, number> = {};
 
-    public addTsInsertions(quantity: number): void {
-        if (!isNaN(quantity) && quantity > 0) {
-            this.tsInsertions += quantity;
-        }
+    public addInsertions(language: string, quantity: number): void {
+        if (!language || Number.isNaN(quantity) || quantity < 0) return;
+
+        this.insertions[language] = (this.insertions[language] || 0) + quantity;
     }
 }

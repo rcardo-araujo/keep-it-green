@@ -1,7 +1,9 @@
 import { CommitData } from "./models/CommitData";
+import { LanguageFileExtentions } from "./registry/LanguageFileExtentions";
 
 import { exec } from "child_process";
 import { promisify } from "util"; 
+import * as path from "path";
 
 const execAsync = promisify(exec);
 
@@ -21,7 +23,7 @@ export async function stageChanges(repository: string): Promise<void> {
 }
 
 export async function fetchCommits(repository: string, author: string, sinceDate: string): Promise<CommitData[]> {
-    const command = `git --no-pager log --author="${author}" --since="${sinceDate}" --numstat --pretty=format:"date=%ad message=%s" --date=short`;
+    const command = `git --no-pager log --reverse --author="${author}" --since="${sinceDate}" --numstat --pretty=format:"date=%ad message=%s" --date=short`;
 
     try {
         const { stdout, stderr } = await execAsync(command, { cwd: repository });
@@ -37,8 +39,8 @@ export async function fetchCommits(repository: string, author: string, sinceDate
     }
 }
 
-export async function emptyCommit(repository: string, message: string | null, date: string): Promise<void> {
-    const command = `git commit --allow-empty ${message ? `-m "${message}"` : "private commit message"} --date=${date}`;
+export async function createCommit(repository: string, message: string | null, date: string): Promise<void> {
+    const command = `git commit --allow-empty -m ${message ? `"${message}"` : `"private commit message"`} --date=${date}`;
 
     try {
         const { stderr } = await execAsync(command, { cwd: repository });
@@ -94,9 +96,11 @@ function extractCommitData(log: string): CommitData[] {
             if (numstatArgs) {
                 const numInsertions = parseInt(numstatArgs[1]);
                 const filePath = numstatArgs[3];
-
-                if (filePath.endsWith(".ts") || filePath.endsWith(".tsx")) {
-                    currCommit.addTsInsertions(numInsertions);
+                
+                const fileExtension = path.extname(filePath).slice(1);
+                const language = LanguageFileExtentions[fileExtension];
+                if (language) {
+                    currCommit.addInsertions(language, numInsertions);
                 }
             }
         }
