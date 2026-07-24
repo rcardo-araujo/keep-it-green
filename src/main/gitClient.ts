@@ -1,17 +1,7 @@
+import { CommitData } from "./models/CommitData";
+
 import { exec } from "child_process";
 import { promisify } from "util"; 
-
-class CommitData {
-    date: string = "";
-    message: string = "";
-    tsInsertions: number = 0;
-
-    public addTsInsertions(quantity: number): void {
-        if (!isNaN(quantity) && quantity > 0) {
-            this.tsInsertions += quantity;
-        }
-    }
-}
 
 const execAsync = promisify(exec);
 
