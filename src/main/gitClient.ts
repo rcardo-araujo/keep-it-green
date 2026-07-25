@@ -7,24 +7,7 @@ import * as path from "path";
 
 const execAsync = promisify(exec);
 
-export async function stageChanges(repository: string): Promise<void> {
-    const command = `git add .`;
-
-    try {
-        const { stderr } = await execAsync(command, { cwd: repository });
-
-        if (stderr) {
-            console.warn("Git info: ", stderr);
-        }
-    } catch(error) {
-        console.log("Git error: ", error);
-        throw(error)
-    }
-}
-
-export async function fetchCommits(repository: string, author: string, sinceDate: string): Promise<CommitData[]> {
-    const command = `git --no-pager log --reverse --author="${author}" --since="${sinceDate}" --numstat --pretty=format:"date=%ad message=%s" --date=short`;
-
+async function executeGitCommand(command: string, repository: string): Promise<string> {
     try {
         const { stdout, stderr } = await execAsync(command, { cwd: repository });
 
@@ -32,46 +15,38 @@ export async function fetchCommits(repository: string, author: string, sinceDate
             console.warn("Git info: ", stderr);
         }
 
-        return extractCommitData(stdout);
-    } catch (error) {
-        console.log("Git error: ", error);
-        throw(error);
-    }
-}
-
-export async function createCommit(repository: string, message: string | null, date: string): Promise<void> {
-    const command = `git commit --allow-empty -m ${message ? `"${message}"` : `"private commit message"`} --date=${date}`;
-
-    try {
-        const { stderr } = await execAsync(command, { cwd: repository });
-
-        if (stderr) {
-            console.warn("Git info: ", stderr);
-        }
+        return stdout;
     } catch(error) {
         console.log("Git error: ", error);
         throw(error)
     }
 }
 
-export async function pushCommits(repository: string): Promise<void> {
-    const command = `git push`;
-
-    try {
-        const { stderr } = await execAsync(command, { cwd: repository });
-
-        if (stderr) {
-            console.warn("Git info: ", stderr);
-        }
-    } catch (error) {
-        console.log(error);
-        throw(error);
-    }
+export async function stageChanges(repository: string): Promise<void> {
+    const command = `git add .`;
+    await executeGitCommand(command, repository);
 }
 
-function extractCommitData(log: string): CommitData[] {
+export async function fetchCommits(repository: string, author: string, sinceDate: string): Promise<CommitData[]> {
+    const command = `git --no-pager log --reverse --author="${author}" --since="${sinceDate}" --numstat --pretty=format:"date=%ad message=%s" --date=short`;
+    const rawCommits = await executeGitCommand(command, repository);
+    
+    return extractCommitData(rawCommits);
+}
+
+export async function createCommit(repository: string, message: string | null, date: string): Promise<void> {
+    const command = `git commit --allow-empty -m ${message ? `"${message}"` : `"private commit message"`} --date=${date}`;
+    await executeGitCommand(command, repository);
+}
+
+export async function pushCommits(repository: string): Promise<void> {
+    const command = `git push`;
+    await executeGitCommand(command, repository);
+}
+
+function extractCommitData(rawCommits: string): CommitData[] {
     const commits: CommitData[] = [];
-    const lines: string[] = log.split("\n");
+    const lines: string[] = rawCommits.split("\n");
     
     let currCommit: CommitData | null = null;
 
