@@ -1,4 +1,5 @@
-import { updateLastSyncDate, SyncProfile } from "./configManager";
+import { SyncProfile } from "./models/SyncProfile";
+import { updateLastSyncDate } from "./configManager";
 import { leaveCommitFootprints } from "./footprintService";
 import { createCommit, fetchCommits, pushCommits, stageChanges } from "./gitClient";
 

@@ -1,3 +1,5 @@
+import { SyncProfile } from "./models/SyncProfile";
+
 import { app } from "electron";
 import * as path from "path";
 import * as fs from "fs";
@@ -6,12 +8,6 @@ const userDataPath = app.getPath("userData");
 
 const syncProfileFilePath = path.join(userDataPath, "sync_profile.json");
 const lastSyncFilePath = path.join(userDataPath, "last_sync.txt");
-
-export interface SyncProfile {
-    authorEmail: string,
-    destinationRepoPath: string,
-    sourceRepoPaths: string[]
-};
 
 export function initializeUserData(): void {
     if (!fs.existsSync(syncProfileFilePath)) {
