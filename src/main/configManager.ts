@@ -41,6 +41,23 @@ export function getSyncProfile(): SyncProfile {
     return JSON.parse(syncProfile);
 }
 
+export async function saveSyncProfile(authorEmail: string, destinationRepoPath: string, sourceRepoPaths: string[]) {
+    const syncProfile: SyncProfile = {
+        authorEmail: authorEmail,
+        destinationRepoPath: destinationRepoPath,
+        sourceRepoPaths: sourceRepoPaths
+    };
+
+    const syncProfilePayload = JSON.stringify(syncProfile, null, 4);
+
+    try {
+        await fs.promises.writeFile(syncProfileFilePath, syncProfilePayload, "utf-8");
+    } catch (error) {
+        console.log("Saving sync profile error: ", error);
+        throw(error);
+    }
+}
+
 export function getLastSyncDate(): string {
     return fs.readFileSync(lastSyncFilePath, "utf-8");
 }
