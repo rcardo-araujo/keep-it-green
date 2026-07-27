@@ -24,6 +24,15 @@ export default function ConfigPanel() {
         loadConfig();
     }, []);
 
+    const handleSelectDestinationRepo = async () => {
+        // @ts-ignore
+        const selectedDirectory = await window.api.selectDirectory();
+
+        if (selectedDirectory) {
+            setDestinationRepo(selectedDirectory);
+        }
+    }
+
     const handleAddSourceRepo = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter" && sourceRepoInput.trim() !== "") {
             setSourceRepos([...sourceRepos, sourceRepoInput.trim()]);
@@ -90,13 +99,77 @@ export default function ConfigPanel() {
             </div>
             <div className="form-group">
                 <label>Destination Repository (personal git)</label>
-                <input
-                    type="text"
-                    className="form-input"
-                    placeholder="C:/Projects/my-github-green"
-                    value={destinationRepo}
-                    onChange={(event) => setDestinationRepo(event.target.value)}
-                />
+                <button
+                    type="button"
+                    onClick={handleSelectDestinationRepo}
+                    style={{
+                        width: "100%",
+                        padding: "0.75rem 1rem",
+                        background: "var(--surface-bg)",
+                        border: destinationRepo ? "1px solid var(--border-light)" : "1px dashed var(--border-light)",
+                        borderRadius: "8px",
+                        height: "50px",
+                        color: "var(--text-primary)", 
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "left",
+                        gap: "0.75rem",
+                        fontWeight: 500,
+                        fontSize: "0.95rem",
+                        transition: "all 0.2s ease"
+                    }}
+                    onMouseOver={(event) =>
+                        (event.currentTarget.style.borderColor = "var(--accent-green)")
+                    }
+                    onMouseOut={(event) => (event.currentTarget.style.borderColor = "var(--border-light)")}
+                >
+                    <span
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "24px",
+                            height: "24px",
+                            color: destinationRepo ? "var(--accent-green)" : "var(--border-medium)",
+                            border: destinationRepo ? "1px solid var(--accent-green)" : "1px solid var(--border-medium)",
+                            background: destinationRepo ? "var(--accent-green-light)" : "transparent",
+                            borderRadius: "4px"
+                        }}
+                    >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </span>
+                    
+                    <span style={{ 
+                        flex: 1, 
+                        textAlign: "left",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden" 
+                    }}>
+                        {destinationRepo ? destinationRepo : "Select Repository"}
+                    </span>
+
+                    {destinationRepo && (
+                        <div
+                            className="btn-remove"
+                            title="Clear selection"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setDestinationRepo("");
+                            }}
+                            style={{
+                                color: "var(--border-medium)",
+                                cursor: "pointer",
+                                padding: "0.2rem 0.5rem"
+                            }}
+                        >
+                            X
+                        </div>
+                    )}
+                </button>
             </div>
             <div className="form-group">
                 <label>Source Repositories</label>
@@ -107,10 +180,11 @@ export default function ConfigPanel() {
                         onClick={() => setIsAddingSourceRepo(true)}
                         style={{
                             width: "100%",
-                            padding: "1rem",
+                            padding: "0.75rem 1rem",
                             background: "var(--surface-bg)",
                             border: "1px dashed var(--border-light)",
                             borderRadius: "8px",
+                            height: "50px",
                             color: "var(--text-primary)", 
                             cursor: "pointer",
                             display: "flex",
@@ -118,7 +192,7 @@ export default function ConfigPanel() {
                             justifyContent: "left",
                             gap: "0.75rem",
                             fontWeight: 500,
-                            fontSize: "0.9rem",
+                            fontSize: "0.95rem",
                             transition: "all 0.2s ease"
                         }}
                         onMouseOver={(event) =>

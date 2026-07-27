@@ -5,7 +5,8 @@ const api = {
     getSyncProfile: () => ipcRenderer.invoke("getSyncProfile"),
     saveSyncProfile: (authorEmail: string, destinationRepoPath: string, sourceRepoPaths: string[]) => {
         return ipcRenderer.invoke("saveSyncProfile", authorEmail, destinationRepoPath, sourceRepoPaths)
-    }
+    },
+    selectDirectory: () => ipcRenderer.invoke("selectDirectory")
 };
 
 if (process.contextIsolated) {
