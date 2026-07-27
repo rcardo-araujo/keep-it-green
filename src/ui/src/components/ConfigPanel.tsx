@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-export default function ConfigPanel() {
+interface ConfigPanelProps {
+    onNext?: () => void;
+}
+
+export default function ConfigPanel({ onNext }: ConfigPanelProps) {
     const [email, setEmail] = useState("");
     const [destinationRepo, setDestinationRepo] = useState("");
 
@@ -50,7 +54,8 @@ export default function ConfigPanel() {
     const handleSaveConfig = async () => {
         // @ts-ignore
         await window.api.saveSyncProfile(email, destinationRepo, sourceRepos);
-        alert("Config saved with success!");
+
+        if (onNext) onNext();
     };
 
     const handleResetConfig = () => {
@@ -288,7 +293,7 @@ export default function ConfigPanel() {
                     style={{ minWidth: "140px" }}
                     onClick={handleSaveConfig}
                 >
-                    Save Settings {" >"}
+                    Next {" >"}
                 </button>
             </div>
         </div>
