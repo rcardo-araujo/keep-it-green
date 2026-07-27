@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain, dialog } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
+import { getSyncProfile, saveSyncProfile } from "./configManager";
 
 function createWindow(): void {
     // Create the browser window.
@@ -58,6 +59,14 @@ app.whenReady().then(() => {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+
+    ipcMain.handle("getSyncProfile", async () => {
+        return await getSyncProfile();
+    });
+
+    ipcMain.handle("saveSyncProfile", async (event, authorEmail: string, destinationRepoPath: string, sourceRepoPaths: string[]) => {
+        await saveSyncProfile(authorEmail, destinationRepoPath, sourceRepoPaths);
     });
 
     ipcMain.handle("selectDirectory", async () => {
