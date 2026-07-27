@@ -14,7 +14,10 @@ function App(): React.JSX.Element {
             }
             {
                 currentScreen === "schedule" && (
-                    <SchedulePanel />
+                    <SchedulePanel 
+                        onBack={() => setCurrentScreen("config")}
+                        onNext={() => alert("Building screen!")}
+                    />
                 )
             }
         </div>
