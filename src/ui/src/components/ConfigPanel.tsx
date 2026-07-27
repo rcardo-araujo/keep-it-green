@@ -5,8 +5,6 @@ export default function ConfigPanel() {
     const [destinationRepo, setDestinationRepo] = useState("");
 
     const [sourceRepos, setSourceRepos] = useState<string[]>([]);
-    const [sourceRepoInput, setSourceRepoInput] = useState("");
-    const [isAddingSourceRepo, setIsAddingSourceRepo] = useState(false);
     const [isListCollapsed, setIsListCollapsed] = useState(true);
 
     useEffect(() => {
@@ -33,18 +31,15 @@ export default function ConfigPanel() {
         }
     }
 
-    const handleAddSourceRepo = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter" && sourceRepoInput.trim() !== "") {
-            setSourceRepos([...sourceRepos, sourceRepoInput.trim()]);
-            setSourceRepoInput("");
-            setIsAddingSourceRepo(false);
-        }
-    };
-
-    const handleCancleAddSourcerepo = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Escape") {
-            setSourceRepoInput("");
-            setIsAddingSourceRepo(false);
+    const handleAddSourceRepo = async () => {
+        // @ts-ignore
+        const selectedDirectory = await window.api.selectDirectory();
+        
+        if (selectedDirectory) {
+            if (!sourceRepos.includes(selectedDirectory)) {
+                setSourceRepos([...sourceRepos, selectedDirectory]);
+                setIsListCollapsed(false); 
+            }
         }
     };
 
@@ -174,68 +169,50 @@ export default function ConfigPanel() {
             <div className="form-group">
                 <label>Source Repositories</label>
 
-                {!isAddingSourceRepo ? (
-                    <button
-                        type="button"
-                        onClick={() => setIsAddingSourceRepo(true)}
+                <button
+                    type="button"
+                    onClick={handleAddSourceRepo}
+                    style={{
+                        width: "100%",
+                        padding: "0.75rem 1rem",
+                        background: "var(--surface-bg)",
+                        border: "1px dashed var(--border-light)",
+                        borderRadius: "8px",
+                        height: "50px",
+                        color: "var(--text-primary)", 
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "left",
+                        gap: "0.75rem",
+                        fontWeight: 500,
+                        fontSize: "0.95rem",
+                        transition: "all 0.2s ease"
+                    }}
+                    onMouseOver={(event) =>
+                        (event.currentTarget.style.borderColor = "var(--accent-green)")
+                    }
+                    onMouseOut={(event) => (event.currentTarget.style.borderColor = "var(--border-light)")}
+                >
+                    <span
                         style={{
-                            width: "100%",
-                            padding: "0.75rem 1rem",
-                            background: "var(--surface-bg)",
-                            border: "1px dashed var(--border-light)",
-                            borderRadius: "8px",
-                            height: "50px",
-                            color: "var(--text-primary)", 
-                            cursor: "pointer",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "left",
-                            gap: "0.75rem",
-                            fontWeight: 500,
-                            fontSize: "0.95rem",
-                            transition: "all 0.2s ease"
+                            justifyContent: "center",
+                            width: "24px",
+                            height: "24px",
+                            color: "var(--border-medium)",
+                            border: "1px solid var(--border-medium)",
+                            borderRadius: "4px"
                         }}
-                        onMouseOver={(event) =>
-                            (event.currentTarget.style.borderColor = "var(--accent-green)")
-                        }
-                        onMouseOut={(event) => (event.currentTarget.style.borderColor = "var(--border-light)")}
                     >
-                        <span
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                width: "24px",
-                                height: "24px",
-                                color: "var(--border-medium)",
-                                border: "1px solid var(--border-medium)",
-                                borderRadius: "4px"
-                            }}
-                        >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </span>
-                        Add Repository
-                    </button>
-                ) : (
-                    <input
-                        autoFocus 
-                        type="text"
-                        className="form-input"
-                        placeholder="Type the path and press Enter..."
-                        value={sourceRepoInput}
-                        onChange={(event) => setSourceRepoInput(event.target.value)}
-                        onKeyDown={(event) => {
-                            handleAddSourceRepo(event);
-                            handleCancleAddSourcerepo(event);
-                        }}
-                        onBlur={() => {
-                            if (sourceRepoInput.trim() === "") setIsAddingSourceRepo(false);
-                        }}
-                    />
-                )}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </span>
+                    Add Repository
+                </button>
 
                 {sourceRepos.length > 0 && (
                     <div style={{ marginTop: "1rem" }}>
