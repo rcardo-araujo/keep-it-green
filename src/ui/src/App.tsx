@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import ConfigPanel from "./components/ConfigPanel"
 import SchedulePanel from "./components/SchedulePanel";
+import PrivacyPanel from "./components/PrivacyPanel";
 
 function App(): React.JSX.Element {
     const [currentScreen, setCurrentScreen] = useState("config");
@@ -16,6 +17,14 @@ function App(): React.JSX.Element {
                 currentScreen === "schedule" && (
                     <SchedulePanel 
                         onBack={() => setCurrentScreen("config")}
+                        onNext={() => setCurrentScreen("privacy")}
+                    />
+                )
+            }
+            {
+                currentScreen === "privacy" && (
+                    <PrivacyPanel
+                        onBack={() => setCurrentScreen("schedule")}
                         onNext={() => alert("Building screen!")}
                     />
                 )
