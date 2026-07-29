@@ -4,7 +4,9 @@ import { app } from "electron";
 import * as path from "path";
 import * as fs from "fs";
 
-const userDataPath = app.getPath("userData");
+const userDataPath = app.isPackaged
+    ? app.getPath("userData")
+    : app.getAppPath();
 
 const syncProfileFilePath = path.join(userDataPath, "sync_profile.json");
 const lastSyncFilePath = path.join(userDataPath, "last_sync.txt");
@@ -37,7 +39,7 @@ export function getSyncProfile(): SyncProfile {
     return JSON.parse(syncProfile);
 }
 
-export async function saveSyncProfile(authorEmail: string, destinationRepoPath: string, sourceRepoPaths: string[]) {
+export async function saveSyncProfile(authorEmail: string, destinationRepoPath: string, sourceRepoPaths: string[]): Promise<void> {
     const syncProfile: SyncProfile = {
         authorEmail: authorEmail,
         destinationRepoPath: destinationRepoPath,
