@@ -16,20 +16,14 @@ export function initializeUserData(): void {
         const defaultSyncProfile: SyncProfile = {
             authorEmail: "",
             destinationRepoPath: "",
-            sourceRepoPaths: []
+            sourceRepoPaths: [],
+            lastSyncDate: "",
+            syncInterval: ""
         };
 
         fs.writeFileSync(syncProfileFilePath, JSON.stringify(defaultSyncProfile, null, 4), "utf-8");
 
         console.log("Sync profile file created");
-    }
-
-    if (!fs.existsSync(lastSyncFilePath)) {
-        const defaultSinceDate = "2026-06-01T00:00:00-03:00";
-
-        fs.writeFileSync(lastSyncFilePath, defaultSinceDate, "utf-8");
-
-        console.log("Last sync file created");
     }
 }
 
@@ -39,11 +33,20 @@ export function getSyncProfile(): SyncProfile {
     return JSON.parse(syncProfile);
 }
 
-export async function saveSyncProfile(authorEmail: string, destinationRepoPath: string, sourceRepoPaths: string[]): Promise<void> {
+export async function saveSyncProfile(
+    authorEmail: string, 
+    destinationRepoPath: string, 
+    sourceRepoPaths: string[],
+    lastSyncDate: string,
+    syncInterval: string
+): Promise<void> {
+
     const syncProfile: SyncProfile = {
-        authorEmail: authorEmail,
-        destinationRepoPath: destinationRepoPath,
-        sourceRepoPaths: sourceRepoPaths
+        authorEmail,
+        destinationRepoPath,
+        sourceRepoPaths,
+        lastSyncDate,
+        syncInterval
     };
 
     const syncProfilePayload = JSON.stringify(syncProfile, null, 4);

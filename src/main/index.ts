@@ -65,8 +65,14 @@ app.whenReady().then(() => {
         return await getSyncProfile();
     });
 
-    ipcMain.handle("saveSyncProfile", async (event, authorEmail: string, destinationRepoPath: string, sourceRepoPaths: string[]) => {
-        await saveSyncProfile(authorEmail, destinationRepoPath, sourceRepoPaths);
+    ipcMain.handle("saveSyncProfile", async (event, 
+        authorEmail: string, 
+        destinationRepoPath: string, 
+        sourceRepoPaths: string[],
+        lastSyncDate: string,
+        syncInterval: string
+    ) => {
+        await saveSyncProfile(authorEmail, destinationRepoPath, sourceRepoPaths, lastSyncDate, syncInterval);
     });
 
     ipcMain.handle("selectDirectory", async () => {
