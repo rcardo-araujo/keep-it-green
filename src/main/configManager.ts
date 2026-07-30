@@ -18,7 +18,8 @@ export function initializeUserData(): void {
             destinationRepoPath: "",
             sourceRepoPaths: [],
             lastSyncDate: "",
-            syncInterval: ""
+            syncInterval: "",
+            repoPrivacies: {}
         };
 
         fs.writeFileSync(syncProfileFilePath, JSON.stringify(defaultSyncProfile, null, 4), "utf-8");
@@ -38,7 +39,8 @@ export async function saveSyncProfile(
     destinationRepoPath: string, 
     sourceRepoPaths: string[],
     lastSyncDate: string,
-    syncInterval: string
+    syncInterval: string,
+    repoPrivacies: Record<string, boolean>
 ): Promise<void> {
 
     const syncProfile: SyncProfile = {
@@ -46,7 +48,8 @@ export async function saveSyncProfile(
         destinationRepoPath,
         sourceRepoPaths,
         lastSyncDate,
-        syncInterval
+        syncInterval,
+        repoPrivacies
     };
 
     const syncProfilePayload = JSON.stringify(syncProfile, null, 4);

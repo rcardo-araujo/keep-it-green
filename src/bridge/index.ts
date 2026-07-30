@@ -3,8 +3,15 @@ import { electronAPI } from "@electron-toolkit/preload";
 
 const api = {
     getSyncProfile: () => ipcRenderer.invoke("getSyncProfile"),
-    saveSyncProfile: (authorEmail: string, destinationRepoPath: string, sourceRepoPaths: string[]) => {
-        return ipcRenderer.invoke("saveSyncProfile", authorEmail, destinationRepoPath, sourceRepoPaths)
+    saveSyncProfile: (
+        authorEmail: string, 
+        destinationRepoPath: string, 
+        sourceRepoPaths: string[], 
+        lastSyncDate: string,
+        syncInterval: string,
+        repoPrivacies: Record<string, boolean>
+    ) => {
+        return ipcRenderer.invoke("saveSyncProfile", authorEmail, destinationRepoPath, sourceRepoPaths, lastSyncDate, syncInterval, repoPrivacies)
     },
     selectDirectory: () => ipcRenderer.invoke("selectDirectory")
 };

@@ -70,9 +70,10 @@ app.whenReady().then(() => {
         destinationRepoPath: string, 
         sourceRepoPaths: string[],
         lastSyncDate: string,
-        syncInterval: string
+        syncInterval: string,
+        repoPrivacies: Record<string, boolean>
     ) => {
-        await saveSyncProfile(authorEmail, destinationRepoPath, sourceRepoPaths, lastSyncDate, syncInterval);
+        await saveSyncProfile(authorEmail, destinationRepoPath, sourceRepoPaths, lastSyncDate, syncInterval, repoPrivacies);
     });
 
     ipcMain.handle("selectDirectory", async () => {

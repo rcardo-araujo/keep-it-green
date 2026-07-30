@@ -1,7 +1,8 @@
 export interface SyncProfile {
-    authorEmail: string,
-    destinationRepoPath: string,
-    sourceRepoPaths: string[],
-    lastSyncDate: string,
-    syncInterval: string
-};
+    authorEmail: string;
+    destinationRepoPath: string;
+    sourceRepoPaths: string[];
+    lastSyncDate: string;
+    syncInterval: string;
+    repoPrivacies: Record<string, boolean>;
+}
