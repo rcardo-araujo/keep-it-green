@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
+import type { SyncProfile } from "../../../main/models/SyncProfile";
 
 interface ConfigPanelProps {
-    onNext?: () => void;
+    onNext?: (data: Pick<SyncProfile, 
+        "authorEmail"
+        | "destinationRepoPath"
+        | "sourceRepoPaths">
+    ) => void;
 }
 
 export default function ConfigPanel({ onNext }: ConfigPanelProps) {
@@ -51,11 +56,12 @@ export default function ConfigPanel({ onNext }: ConfigPanelProps) {
         setSourceRepos(sourceRepos.filter((_, i) => i !== indexToRemove));
     };
 
-    const handleSaveConfig = async () => {
-        // @ts-ignore
-        await window.api.saveSyncProfile(email, destinationRepo, sourceRepos);
-
-        if (onNext) onNext();
+    const handleNext = async () => {
+        if (onNext) onNext({
+            authorEmail: email,
+            destinationRepoPath: destinationRepo,
+            sourceRepoPaths: sourceRepos
+        });
     };
 
     const handleResetConfig = () => {
@@ -291,7 +297,7 @@ export default function ConfigPanel({ onNext }: ConfigPanelProps) {
                 <button
                     className="btn-primary"
                     style={{ minWidth: "140px" }}
-                    onClick={handleSaveConfig}
+                    onClick={handleNext}
                 >
                     Next {" >"}
                 </button>

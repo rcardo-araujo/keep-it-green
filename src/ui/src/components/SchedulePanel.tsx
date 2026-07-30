@@ -1,8 +1,9 @@
 import { useState, useRef } from "react";
+import { SyncProfile } from "../../../main/models/SyncProfile";
 
 interface SchedulePanelProps {
     onBack?: () => void,
-    onNext?: () => void
+    onNext?: (data: Pick<SyncProfile, "lastSyncDate" | "syncInterval">) => void
 }
 
 export default function SchedulePanel({ onBack, onNext }: SchedulePanelProps) {
@@ -16,7 +17,10 @@ export default function SchedulePanel({ onBack, onNext }: SchedulePanelProps) {
     }
 
     const handleNext = () => {
-        if (onNext) onNext();
+        if (onNext) onNext({
+            lastSyncDate: sinceDate,
+            syncInterval: syncInterval
+        });
     }
 
     const handleOpenCalendar = async () => {
