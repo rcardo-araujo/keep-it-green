@@ -3,14 +3,14 @@ import { updateLastSyncDate } from "./configManager";
 import { leaveCommitFootprints } from "./footprintService";
 import { createCommit, fetchCommits, pushCommits, stageChanges } from "./gitClient";
 
-export async function runSync(syncProfile: SyncProfile, lastSyncDate: string) {
+export async function runSync(syncProfile: SyncProfile) {
     try {
         await updateLastSyncDate();
 
         for (const repo of syncProfile.sourceRepoPaths) {
             const shouldPreserveMessage: boolean = syncProfile.repoPrivacies[repo] ?? true;
 
-            const commits = await fetchCommits(repo, syncProfile.authorEmail, lastSyncDate); 
+            const commits = await fetchCommits(repo, syncProfile.authorEmail, syncProfile.lastSyncDate); 
 
             for (const commit of commits) {
                 await leaveCommitFootprints(commit, syncProfile.destinationRepoPath);
