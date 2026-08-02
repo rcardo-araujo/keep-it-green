@@ -1,6 +1,6 @@
 export class CommitData {
     date: string = "";
-    message: string = "";
+    message: string | null = "";
     insertions: Record<string, number> = {};
 
     public addInsertions(language: string, quantity: number): void {

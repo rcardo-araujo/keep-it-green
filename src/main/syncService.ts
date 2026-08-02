@@ -8,11 +8,15 @@ export async function runSync(syncProfile: SyncProfile, lastSyncDate: string) {
         await updateLastSyncDate();
 
         for (const repo of syncProfile.sourceRepoPaths) {
+            const shouldPreserveMessage: boolean = syncProfile.repoPrivacies[repo] ?? true;
+
             const commits = await fetchCommits(repo, syncProfile.authorEmail, lastSyncDate); 
 
             for (const commit of commits) {
                 await leaveCommitFootprints(commit, syncProfile.destinationRepoPath);
                 await stageChanges(syncProfile.destinationRepoPath);
+
+                if (shouldPreserveMessage) commit.message = null;
                 await createCommit(syncProfile.destinationRepoPath, commit.message, commit.date);
             }
 
