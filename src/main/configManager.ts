@@ -9,7 +9,6 @@ const userDataPath = app.isPackaged
     : app.getAppPath();
 
 const syncProfileFilePath = path.join(userDataPath, "sync_profile.json");
-const lastSyncFilePath = path.join(userDataPath, "last_sync.txt");
 
 export function initializeUserData(): void {
     if (!fs.existsSync(syncProfileFilePath)) {
@@ -38,11 +37,19 @@ export async function saveSyncProfile(profile: SyncProfile): Promise<void> {
     }
 }
 
-export function getLastSyncDate(): string {
-    return fs.readFileSync(lastSyncFilePath, "utf-8");
-}
+export async function updateLastSyncDate(): Promise<void> {
+    try {
+        const syncProfile = await getSyncProfile();
+        
+        const updatedSyncProfile = {
+            ...syncProfile,
+            lastSyncDate: new Date().toISOString()
+        }
 
-export function updateLastSyncDate(): void {
-    const newTimestamp = new Date().toISOString();
-    fs.writeFileSync(lastSyncFilePath, newTimestamp, "utf-8");
+        const updatedSyncProfilePayload = JSON.stringify(updatedSyncProfile, null, 4);
+        await fs.promises.writeFile(syncProfileFilePath, updatedSyncProfilePayload, "utf-8");
+    } catch(error) {
+        console.log("Updating last sync date error: ", error);
+        throw(error);
+    }
 }
