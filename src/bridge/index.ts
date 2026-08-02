@@ -1,18 +1,11 @@
+import { SyncProfile } from "../main/models/SyncProfile";
+
 import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
 
 const api = {
     getSyncProfile: () => ipcRenderer.invoke("getSyncProfile"),
-    saveSyncProfile: (
-        authorEmail: string, 
-        destinationRepoPath: string, 
-        sourceRepoPaths: string[], 
-        lastSyncDate: string,
-        syncInterval: string,
-        repoPrivacies: Record<string, boolean>
-    ) => {
-        return ipcRenderer.invoke("saveSyncProfile", authorEmail, destinationRepoPath, sourceRepoPaths, lastSyncDate, syncInterval, repoPrivacies)
-    },
+    saveSyncProfile: (profile: SyncProfile) => ipcRenderer.invoke("saveSyncProfile", profile),
     selectDirectory: () => ipcRenderer.invoke("selectDirectory")
 };
 

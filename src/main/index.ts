@@ -3,6 +3,7 @@ import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import { getSyncProfile, saveSyncProfile } from "./configManager";
+import { SyncProfile } from "./models/SyncProfile";
 
 function createWindow(): void {
     // Create the browser window.
@@ -65,16 +66,7 @@ app.whenReady().then(() => {
         return await getSyncProfile();
     });
 
-    ipcMain.handle("saveSyncProfile", async (event, 
-        authorEmail: string, 
-        destinationRepoPath: string, 
-        sourceRepoPaths: string[],
-        lastSyncDate: string,
-        syncInterval: string,
-        repoPrivacies: Record<string, boolean>
-    ) => {
-        await saveSyncProfile(authorEmail, destinationRepoPath, sourceRepoPaths, lastSyncDate, syncInterval, repoPrivacies);
-    });
+    ipcMain.handle("saveSyncProfile", async (event, profile: SyncProfile) => await saveSyncProfile(profile));
 
     ipcMain.handle("selectDirectory", async () => {
         const result = await dialog.showOpenDialog({

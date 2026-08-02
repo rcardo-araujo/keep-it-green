@@ -34,25 +34,8 @@ export function getSyncProfile(): SyncProfile {
     return JSON.parse(syncProfile);
 }
 
-export async function saveSyncProfile(
-    authorEmail: string, 
-    destinationRepoPath: string, 
-    sourceRepoPaths: string[],
-    lastSyncDate: string,
-    syncInterval: string,
-    repoPrivacies: Record<string, boolean>
-): Promise<void> {
-
-    const syncProfile: SyncProfile = {
-        authorEmail,
-        destinationRepoPath,
-        sourceRepoPaths,
-        lastSyncDate,
-        syncInterval,
-        repoPrivacies
-    };
-
-    const syncProfilePayload = JSON.stringify(syncProfile, null, 4);
+export async function saveSyncProfile(profile: SyncProfile): Promise<void> {
+    const syncProfilePayload = JSON.stringify(profile, null, 4);
 
     try {
         await fs.promises.writeFile(syncProfileFilePath, syncProfilePayload, "utf-8");
