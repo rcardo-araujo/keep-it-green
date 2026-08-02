@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { SyncProfile } from "../../../main/models/SyncProfile";
 
 interface PrivacyPanelProps {
+    sourceRepos?: string[];
     onBack?: () => void;
-    onNext?: () => void;
+    onSave?: (data: Pick<SyncProfile, "repoPrivacies">) => void;
 }
 
-export default function PrivacyPanel({ onBack, onNext }: PrivacyPanelProps) {
+export default function PrivacyPanel({ sourceRepos, onBack, onSave }: PrivacyPanelProps) {
     const [repoPrivacies, setRepoPrivacies] = useState<Record<string, boolean>>({});
+
+    useEffect(() => {
+        if (!sourceRepos) return;
+
+        setRepoPrivacies(Object.fromEntries(
+            sourceRepos.map(repo => [repo, false])
+        ) as Record<string, boolean>);
+    }, []);
 
     const handleToggleRepo = (repoPath: string) => {
         setRepoPrivacies(prevState => ({
@@ -19,8 +29,8 @@ export default function PrivacyPanel({ onBack, onNext }: PrivacyPanelProps) {
         if (onBack) onBack();
     }
 
-    const handleNext = () => {
-        if (onNext) onNext();
+    const handleSave = () => {
+        if (onSave) onSave({ repoPrivacies: repoPrivacies });
     }
 
     return (
@@ -123,9 +133,9 @@ export default function PrivacyPanel({ onBack, onNext }: PrivacyPanelProps) {
                 <button
                     className="btn-primary"
                     style={{ minWidth: "140px" }}
-                    onClick={handleNext}
+                    onClick={handleSave}
                 >
-                    Next {" >"}
+                    Save
                 </button>
             </div>
         </div>

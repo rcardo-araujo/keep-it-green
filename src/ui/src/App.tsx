@@ -34,8 +34,17 @@ function App(): React.JSX.Element {
             {
                 currentScreen === "privacy" && (
                     <PrivacyPanel
+                        sourceRepos={syncProfileDto.sourceRepoPaths}
                         onBack={() => setCurrentScreen("schedule")}
-                        onNext={() => alert("Building screen!")}
+                        onSave={async (privacyData) => {
+                            const syncProfileToSave = { ...syncProfileDto, ...privacyData };
+                            setSyncProfileDto(prevState => ({ ...prevState, ...syncProfileToSave }));
+
+                            // @ts-ignore
+                            await window.api.saveSyncProfile(syncProfileToSave);
+
+                            alert("Settings saved! Next panel in construction.")
+                        }}
                     />
                 )
             }
