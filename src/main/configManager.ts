@@ -1,4 +1,4 @@
-import { SyncProfile } from "./models/SyncProfile";
+import { createEmptySyncProfile, SyncProfile } from "./models/SyncProfile";
 
 import { app } from "electron";
 import * as path from "path";
@@ -13,14 +13,7 @@ const lastSyncFilePath = path.join(userDataPath, "last_sync.txt");
 
 export function initializeUserData(): void {
     if (!fs.existsSync(syncProfileFilePath)) {
-        const defaultSyncProfile: SyncProfile = {
-            authorEmail: "",
-            destinationRepoPath: "",
-            sourceRepoPaths: [],
-            lastSyncDate: "",
-            syncInterval: "",
-            repoPrivacies: {}
-        };
+        const defaultSyncProfile = createEmptySyncProfile();
 
         fs.writeFileSync(syncProfileFilePath, JSON.stringify(defaultSyncProfile, null, 4), "utf-8");
 

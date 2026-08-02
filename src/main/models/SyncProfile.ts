@@ -6,3 +6,14 @@ export interface SyncProfile {
     syncInterval: string;
     repoPrivacies: Record<string, boolean>;
 }
+
+export function createEmptySyncProfile(): SyncProfile {
+    return {
+        authorEmail: "",
+        destinationRepoPath: "",
+        sourceRepoPaths: [],
+        lastSyncDate: "",
+        syncInterval: "",
+        repoPrivacies: {}
+    };
+}
