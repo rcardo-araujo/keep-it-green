@@ -22,3 +22,10 @@ export function startSyncJob(intervalInMs: number): void {
 
     console.log(`Timer started to run the syncronization at ${intervalInMs}`);
 }
+
+export function stopSyncJob(): void {
+    if (syncTimer !== null) {
+        clearInterval(syncTimer);
+        syncTimer = null;
+    }
+}
