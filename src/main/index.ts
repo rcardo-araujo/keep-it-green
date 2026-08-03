@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import { getSyncProfile, saveSyncProfile } from "./configManager";
 import { SyncProfile } from "./models/SyncProfile";
+import { startSyncJob } from "./services/jobScheduler";
 
 function createWindow(): void {
     // Create the browser window.
@@ -62,11 +63,31 @@ app.whenReady().then(() => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 
+    try {
+        
+    } catch (error) {
+        throw(error);
+    }
+
     ipcMain.handle("getSyncProfile", async () => {
         return await getSyncProfile();
     });
 
-    ipcMain.handle("saveSyncProfile", async (event, profile: SyncProfile) => await saveSyncProfile(profile));
+    try {
+        const profile = getSyncProfile();
+        
+        const interval = SyncIntervals[profile.syncInterval];
+        startSyncJob(interval)
+    } catch (error) {
+        throw(error);
+    }
+
+    ipcMain.handle("saveSyncProfile", async (event, profile: SyncProfile) => {
+        await saveSyncProfile(profile);
+
+        const interval = SyncIntervals[profile.syncInterval];
+        startSyncJob(interval);
+    });
 
     ipcMain.handle("selectDirectory", async () => {
         const result = await dialog.showOpenDialog({
