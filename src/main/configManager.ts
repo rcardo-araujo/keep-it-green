@@ -20,10 +20,17 @@ export function initializeUserData(): void {
     }
 }
 
-export function getSyncProfile(): SyncProfile {
-    const syncProfile = fs.readFileSync(syncProfileFilePath, "utf-8");
+export function getSyncProfile(): SyncProfile | null {
+    if (!fs.existsSync(syncProfileFilePath)) return null;
 
-    return JSON.parse(syncProfile);
+    try {
+        const syncProfile = fs.readFileSync(syncProfileFilePath, "utf-8");
+
+        return JSON.parse(syncProfile);
+    } catch (error) {
+        console.log("Sync profile JSON is corrupted: ", error);
+        return null;
+    }
 }
 
 export async function saveSyncProfile(profile: SyncProfile): Promise<void> {
