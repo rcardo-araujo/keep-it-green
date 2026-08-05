@@ -3,6 +3,7 @@ import ConfigPanel from "./components/ConfigPanel"
 import SchedulePanel from "./components/SchedulePanel";
 import PrivacyPanel from "./components/PrivacyPanel";
 import type { SyncProfile } from "../../main/models/SyncProfile"
+import Dashboard from "./components/Dashboard";
 
 function App(): React.JSX.Element {
     const [currentScreen, setCurrentScreen] = useState("config");
@@ -43,9 +44,14 @@ function App(): React.JSX.Element {
                             // @ts-ignore
                             await window.api.saveSyncProfile(syncProfileToSave);
 
-                            alert("Settings saved! Next panel in construction.")
+                            setCurrentScreen("dashboard");
                         }}
                     />
+                )
+            }
+            {
+                currentScreen === "dashboard" && (
+                    <Dashboard />
                 )
             }
         </div>
