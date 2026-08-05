@@ -76,8 +76,10 @@ app.whenReady().then(() => {
     try {
         const profile = getSyncProfile();
         
-        const interval = SyncIntervals[profile.syncInterval];
-        startSyncJob(interval)
+        if (profile !== null) {
+            const interval = SyncIntervals[profile.syncInterval];
+            startSyncJob(interval);
+        }
     } catch (error) {
         throw(error);
     }
