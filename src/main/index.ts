@@ -5,6 +5,7 @@ import icon from "../../resources/icon.png?asset";
 import { getSyncProfile, saveSyncProfile } from "./configManager";
 import { SyncProfile } from "./models/SyncProfile";
 import { startSyncJob } from "./services/jobScheduler";
+import { SyncIntervals } from "./registry/SyncIntervals";
 
 function createWindow(): void {
     // Create the browser window.

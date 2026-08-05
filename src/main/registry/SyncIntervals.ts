@@ -5,7 +5,7 @@ const TIME: Record<string, number> = {
     DAY: 1000 * 60 * 60 * 24
 };
 
-const SyncIntervals: Record<string, number> = {
+export const SyncIntervals: Record<string, number> = {
     hourly: TIME.HOUR,
     "3hours": TIME.HOUR * 3,
     "12hours": TIME.HOUR * 12,
