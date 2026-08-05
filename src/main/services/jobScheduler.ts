@@ -11,16 +11,19 @@ export function startSyncJob(intervalInMs: number): void {
 
         try {
             const profile = getSyncProfile();
-            await runSync(profile); 
 
-            console.log("Synchronization completed successfully!");
+            if (profile) {
+                await runSync(profile); 
+
+                console.log("Synchronization completed successfully!");
+            } 
         } catch (error) {
             console.log("Failed to run synchronization job: ", error);
             throw(error);
         }
     }, intervalInMs);
 
-    console.log(`Timer started to run the syncronization at ${intervalInMs}`);
+    console.log(`Timer started to run the syncronization at ${intervalInMs}ms`);
 }
 
 export function stopSyncJob(): void {
