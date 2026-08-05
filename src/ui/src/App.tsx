@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import ConfigPanel from "./components/ConfigPanel"
 import SchedulePanel from "./components/SchedulePanel";
 import PrivacyPanel from "./components/PrivacyPanel";
@@ -6,8 +6,25 @@ import type { SyncProfile } from "../../main/models/SyncProfile"
 import Dashboard from "./components/Dashboard";
 
 function App(): React.JSX.Element {
-    const [currentScreen, setCurrentScreen] = useState("config");
+    const [currentScreen, setCurrentScreen] = useState("");
     const [syncProfileDto, setSyncProfileDto] = useState<Partial<SyncProfile>>({});
+
+    useEffect(() => {
+        const loadInitialScreen = async () => {
+            try {
+                // @ts-ignore
+                const profile = await window.api.getSyncProfile();
+
+                if (profile !== null) setCurrentScreen("dashboard");
+                else setCurrentScreen("config");
+            } catch (error) {
+                console.log("Failed to load profile: ", error);
+                setCurrentScreen("config");
+            }
+        };
+
+        loadInitialScreen();
+    }, []);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', alignItems: 'center' }}>
