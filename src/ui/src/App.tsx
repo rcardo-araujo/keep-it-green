@@ -4,6 +4,7 @@ import SchedulePanel from "./components/SchedulePanel";
 import PrivacyPanel from "./components/PrivacyPanel";
 import type { SyncProfile } from "../../main/models/SyncProfile"
 import Dashboard from "./components/Dashboard";
+import Sidebar from "./components/Sidebar";
 
 function App(): React.JSX.Element {
     const [currentScreen, setCurrentScreen] = useState("");
@@ -27,50 +28,67 @@ function App(): React.JSX.Element {
     }, []);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', alignItems: 'center' }}>
-            {
-                currentScreen === "config" && (
-                    <ConfigPanel 
-                        onNext={(configData) => { 
-                            setSyncProfileDto(prevState => ({ ...prevState, ...configData }))
-                            setCurrentScreen("schedule");
-                        }} 
-                    />
-                )
-            }
-            {
-                currentScreen === "schedule" && (
-                    <SchedulePanel 
-                        onBack={() => setCurrentScreen("config")}
-                        onNext={(scheduleData) => {
-                            setSyncProfileDto(prevState => ({ ...prevState, ...scheduleData }))
-                            setCurrentScreen("privacy");
-                        }}
-                    />
-                )
-            }
-            {
-                currentScreen === "privacy" && (
-                    <PrivacyPanel
-                        sourceRepos={syncProfileDto.sourceRepoPaths}
-                        onBack={() => setCurrentScreen("schedule")}
-                        onSave={async (privacyData) => {
-                            const syncProfileToSave = { ...syncProfileDto, ...privacyData };
-                            setSyncProfileDto(prevState => ({ ...prevState, ...syncProfileToSave }));
+        <div className="app-layout">
+            {(currentScreen === "dashboard" || currentScreen === "settings") && (
+                <Sidebar currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
+            )}
 
-                            // @ts-ignore
-                            await window.api.saveSyncProfile(syncProfileToSave);
+            <main className="main-content">
+                <div className="wizard-container">
+                    {
+                        currentScreen === "config" && (
+                            <ConfigPanel 
+                                onNext={(configData) => { 
+                                    setSyncProfileDto(prevState => ({ ...prevState, ...configData }))
+                                    setCurrentScreen("schedule");
+                                }} 
+                            />
+                        )
+                    }
+                    {
+                        currentScreen === "schedule" && (
+                            <SchedulePanel 
+                                onBack={() => setCurrentScreen("config")}
+                                onNext={(scheduleData) => {
+                                    setSyncProfileDto(prevState => ({ ...prevState, ...scheduleData }))
+                                    setCurrentScreen("privacy");
+                                }}
+                            />
+                        )
+                    }
+                    {
+                        currentScreen === "privacy" && (
+                            <PrivacyPanel
+                                sourceRepos={syncProfileDto.sourceRepoPaths}
+                                onBack={() => setCurrentScreen("schedule")}
+                                onSave={async (privacyData) => {
+                                    const syncProfileToSave = { ...syncProfileDto, ...privacyData };
+                                    setSyncProfileDto(prevState => ({ ...prevState, ...syncProfileToSave }));
 
-                            setCurrentScreen("dashboard");
-                        }}
-                    />
-                )
-            }
-            {
-                currentScreen === "dashboard" && (
-                    <Dashboard />
-                )
-            }
+                                    // @ts-ignore
+                                    await window.api.saveSyncProfile(syncProfileToSave);
+
+                                    setCurrentScreen("dashboard");
+                                }}
+                            />
+                        )
+                    }
+                    {
+                        currentScreen === "dashboard" && (
+                            <Dashboard />
+                        )
+                    }
+                    {
+                        currentScreen === "settings" && (
+                            <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                                <h2>Settings Screen</h2>
+                                <p>This screen is under construction based on the new unified layout.</p>
+                                <button className="btn-secondary" onClick={() => setCurrentScreen('dashboard')}>Back to Dashboard</button>
+                            </div>
+                        )
+                    }
+                </div>
+            </main>
         </div>
     )
 }
