@@ -6,6 +6,7 @@ import { getSyncProfile, saveSyncProfile } from "./configManager";
 import { SyncProfile } from "./models/SyncProfile";
 import { startSyncJob } from "./services/jobScheduler";
 import { SyncIntervals } from "./registry/SyncIntervals";
+import { runSync } from "./syncService";
 
 function createWindow(): void {
     // Create the browser window.
@@ -102,6 +103,16 @@ app.whenReady().then(() => {
         }
 
         return result.filePaths[0];
+    });
+
+    ipcMain.handle("sync", async () => {
+        try {
+            const profile = getSyncProfile();
+
+            if (profile !== null) await runSync(profile);
+        } catch (error) {
+            throw(error);
+        }
     });
 });
 

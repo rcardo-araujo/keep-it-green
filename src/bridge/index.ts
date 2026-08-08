@@ -6,7 +6,8 @@ import { electronAPI } from "@electron-toolkit/preload";
 const api = {
     getSyncProfile: () => ipcRenderer.invoke("getSyncProfile"),
     saveSyncProfile: (profile: SyncProfile) => ipcRenderer.invoke("saveSyncProfile", profile),
-    selectDirectory: () => ipcRenderer.invoke("selectDirectory")
+    selectDirectory: () => ipcRenderer.invoke("selectDirectory"),
+    sync: () => ipcRenderer.invoke("sync")
 };
 
 if (process.contextIsolated) {

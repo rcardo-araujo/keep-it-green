@@ -1,4 +1,19 @@
+import { useState } from "react";
+
 export default function DashboardPanel() {
+    const [isSyncing, setIsSyncing] = useState(false);
+
+    const handleSync = async () => {
+        setIsSyncing(true);
+
+        try{
+            // @ts-ignore
+            await window.api.sync();
+        } finally {
+            setIsSyncing(false);
+        }
+    }
+
     return (
         <div style={{ width: "100%", maxWidth: "800px", margin: "0 auto", paddingBottom: "4rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3rem" }}>
@@ -8,6 +23,8 @@ export default function DashboardPanel() {
 
                 <button
                     className="btn-primary"
+                    onClick={handleSync}
+                    disabled={isSyncing}
                     style={{ minWidth: "140px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
