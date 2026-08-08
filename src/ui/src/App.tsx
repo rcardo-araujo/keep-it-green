@@ -3,7 +3,7 @@ import ConfigPanel from "./components/ConfigPanel"
 import SchedulePanel from "./components/SchedulePanel";
 import PrivacyPanel from "./components/PrivacyPanel";
 import type { SyncProfile } from "../../main/models/SyncProfile"
-import Dashboard from "./components/Dashboard";
+import DashboardPanel from "./components/DashboardPanel";
 import Sidebar from "./components/Sidebar";
 import SettingsPanel from "./components/SettingsPanel";
 
@@ -76,7 +76,7 @@ function App(): React.JSX.Element {
                     }
                     {
                         currentScreen === "dashboard" && (
-                            <Dashboard />
+                            <DashboardPanel />
                         )
                     }
                     {
