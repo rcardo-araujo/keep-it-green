@@ -28,7 +28,8 @@ body {
     background-image: radial-gradient(circle at top right, rgba(16, 185, 129, 0.08), transparent 40%),
                       radial-gradient(circle at bottom left, #ffffff, transparent 40%);
     color: var(--text-primary);
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     user-select: none;
     margin: 0;
@@ -37,20 +38,22 @@ body {
 
 #root {
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
 }
 
 .app-layout {
     display: flex;
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .sidebar {
     width: 200px;
     background: var(--glass-bg);
-    border-right: 1px solid var(--glass-border);
+    border-right: 1px solid var(--border-light);
     padding: 1.5rem 0;
     display: flex;
     flex-direction: column;
@@ -116,6 +119,9 @@ body {
     align-items: flex-start;
     padding: 10vh 2rem 2rem 2rem;
     overflow-y: auto;
+    min-height: 0;
+    height: 100%;
+    background: #ffffff;
 }
 
 .wizard-container {
@@ -127,12 +133,9 @@ body {
 }
 
 .glass-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
+    background: #ffffff;
+    border: 1px solid var(--border-light);
     border-radius: 16px;
-    box-shadow: var(--glass-shadow);
 }
 
 .btn-primary {
@@ -232,13 +235,13 @@ body {
 .btn-remove {
     background: transparent;
     border: none;
-    color: #ef4444; 
+    color: var(--text-secondary); 
     cursor: pointer;
     font-weight: 600;
 }
 
 .btn-remove:hover {
-    color: #dc2626;
+    color: var(--text-primary);
 }
 
 ::-webkit-scrollbar {

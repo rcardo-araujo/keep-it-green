@@ -5,6 +5,7 @@ import PrivacyPanel from "./components/PrivacyPanel";
 import type { SyncProfile } from "../../main/models/SyncProfile"
 import Dashboard from "./components/Dashboard";
 import Sidebar from "./components/Sidebar";
+import SettingsPanel from "./components/SettingsPanel";
 
 function App(): React.JSX.Element {
     const [currentScreen, setCurrentScreen] = useState("");
@@ -80,11 +81,7 @@ function App(): React.JSX.Element {
                     }
                     {
                         currentScreen === "settings" && (
-                            <div style={{ textAlign: "center", marginTop: "2rem" }}>
-                                <h2>Settings Screen</h2>
-                                <p>This screen is under construction based on the new unified layout.</p>
-                                <button className="btn-secondary" onClick={() => setCurrentScreen('dashboard')}>Back to Dashboard</button>
-                            </div>
+                            <SettingsPanel />
                         )
                     }
                 </div>
