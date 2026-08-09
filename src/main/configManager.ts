@@ -1,30 +1,23 @@
 import { createEmptySyncProfile, SyncProfile } from "./models/SyncProfile";
+import { SYNC_PROFILE_PATH } from "./utils/paths";
 
-import { app } from "electron";
-import * as path from "path";
 import * as fs from "fs";
 
-const userDataPath = app.isPackaged
-    ? app.getPath("userData")
-    : app.getAppPath();
-
-const syncProfileFilePath = path.join(userDataPath, "sync_profile.json");
-
 export function initializeUserData(): void {
-    if (!fs.existsSync(syncProfileFilePath)) {
+    if (!fs.existsSync(SYNC_PROFILE_PATH)) {
         const defaultSyncProfile = createEmptySyncProfile();
 
-        fs.writeFileSync(syncProfileFilePath, JSON.stringify(defaultSyncProfile, null, 4), "utf-8");
+        fs.writeFileSync(SYNC_PROFILE_PATH, JSON.stringify(defaultSyncProfile, null, 4), "utf-8");
 
         console.log("Sync profile file created");
     }
 }
 
 export function getSyncProfile(): SyncProfile | null {
-    if (!fs.existsSync(syncProfileFilePath)) return null;
+    if (!fs.existsSync(SYNC_PROFILE_PATH)) return null;
 
     try {
-        const syncProfile = fs.readFileSync(syncProfileFilePath, "utf-8");
+        const syncProfile = fs.readFileSync(SYNC_PROFILE_PATH, "utf-8");
 
         return JSON.parse(syncProfile);
     } catch (error) {
@@ -37,7 +30,7 @@ export async function saveSyncProfile(profile: SyncProfile): Promise<void> {
     const syncProfilePayload = JSON.stringify(profile, null, 4);
 
     try {
-        await fs.promises.writeFile(syncProfileFilePath, syncProfilePayload, "utf-8");
+        await fs.promises.writeFile(SYNC_PROFILE_PATH, syncProfilePayload, "utf-8");
     } catch (error) {
         console.log("Saving sync profile error: ", error);
         throw(error);
@@ -54,7 +47,7 @@ export async function updateLastSyncDate(): Promise<void> {
         }
 
         const updatedSyncProfilePayload = JSON.stringify(updatedSyncProfile, null, 4);
-        await fs.promises.writeFile(syncProfileFilePath, updatedSyncProfilePayload, "utf-8");
+        await fs.promises.writeFile(SYNC_PROFILE_PATH, updatedSyncProfilePayload, "utf-8");
     } catch(error) {
         console.log("Updating last sync date error: ", error);
         throw(error);
