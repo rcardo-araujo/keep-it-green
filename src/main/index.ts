@@ -7,6 +7,7 @@ import { SyncProfile } from "./models/SyncProfile";
 import { startSyncJob } from "./services/jobScheduler";
 import { SyncIntervals } from "./registry/SyncIntervals";
 import { runSync } from "./syncService";
+import { initializeMetricsDb } from "./databases/db";
 
 function createWindow(): void {
     // Create the browser window.
@@ -43,7 +44,7 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
     // Set app user model id for windows
     electronApp.setAppUserModelId("com.electron");
 
@@ -66,8 +67,11 @@ app.whenReady().then(() => {
     });
 
     try {
+        await initializeMetricsDb();
         
+        console.log("Metrics database initialized");
     } catch (error) {
+        console.error("Error at loading Metrics database: ", error);
         throw(error);
     }
 
