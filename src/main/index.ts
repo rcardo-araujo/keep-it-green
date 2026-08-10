@@ -8,6 +8,7 @@ import { startSyncJob } from "./services/jobScheduler";
 import { SyncIntervals } from "./registry/SyncIntervals";
 import { runSync } from "./syncService";
 import { initializeMetricsDb } from "./databases/db";
+import { getDashboardStats } from "./dashboardService";
 
 function createWindow(): void {
     // Create the browser window.
@@ -114,6 +115,14 @@ app.whenReady().then(async () => {
             const profile = getSyncProfile();
 
             if (profile !== null) await runSync(profile);
+        } catch (error) {
+            throw(error);
+        }
+    });
+
+    ipcMain.handle("getDashboardStats", async () => {
+        try {
+            return await getDashboardStats();
         } catch (error) {
             throw(error);
         }

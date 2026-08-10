@@ -7,7 +7,8 @@ const api = {
     getSyncProfile: () => ipcRenderer.invoke("getSyncProfile"),
     saveSyncProfile: (profile: SyncProfile) => ipcRenderer.invoke("saveSyncProfile", profile),
     selectDirectory: () => ipcRenderer.invoke("selectDirectory"),
-    sync: () => ipcRenderer.invoke("sync")
+    sync: () => ipcRenderer.invoke("sync"),
+    getDashboardStats: () => ipcRenderer.invoke("getDashboardStats")
 };
 
 if (process.contextIsolated) {
