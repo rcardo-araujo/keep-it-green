@@ -1,32 +1,32 @@
-import { defaultMetrics, Metrics } from "./schemas";
+import { defaultSyncHistory, SyncHistory } from "./schemas";
 import { METRICS_DB_PATH } from "../utils/paths";
 
 import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
 
-let metricsDb: Low<Metrics> | null = null;
+let SyncHistoryDb: Low<SyncHistory> | null = null;
 
 export async function initializeMetricsDb() {
-    const adapter = new JSONFile<Metrics>(METRICS_DB_PATH);
-    metricsDb = new Low<Metrics>(adapter, defaultMetrics);
+    const adapter = new JSONFile<SyncHistory>(METRICS_DB_PATH);
+    SyncHistoryDb = new Low<SyncHistory>(adapter, defaultSyncHistory);
 
-    await metricsDb.read();
+    await SyncHistoryDb.read();
 }
 
-export const metricsRepository = {
-    getMetrics: () => {
-        if (!metricsDb) throw new Error("Metrics database not initialized");
+export const SyncHistoryRepository = {
+    getHistory: () => {
+        if (!SyncHistoryDb) throw new Error("Metrics database not initialized");
 
-        return structuredClone(metricsDb.data);
+        return structuredClone(SyncHistoryDb.data);
     },
 
-    addToTotalCommits: async (quantity: number) => {
-        if (!metricsDb) throw new Error("Metrics database not initialized");
+    incrementCommitsSynced: async (count: number) => {
+        if (!SyncHistoryDb) throw new Error("Metrics database not initialized");
 
-        metricsDb.data.totalCommits += quantity;
+        SyncHistoryDb.data.commitsSynced += count;
 
         try {
-            await metricsDb.write();
+            await SyncHistoryDb.write();
         } catch (error) {
             console.error("Failed to save Metrics DB: ", error);
             throw(error);

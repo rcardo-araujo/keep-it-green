@@ -2,13 +2,13 @@ import { SyncProfile } from "./models/SyncProfile";
 import { updateLastSyncDate } from "./configManager";
 import { leaveCommitFootprints } from "./footprintService";
 import { createCommit, fetchCommits, pushCommits, stageChanges } from "./gitClient";
-import { metricsRepository } from "./databases/db";
+import { SyncHistoryRepository } from "./databases/db";
 
 export async function runSync(syncProfile: SyncProfile) {
     try {
         await updateLastSyncDate();
 
-        let totalCommitsSync = 0;
+        let commitsSynced = 0;
         for (const repo of syncProfile.sourceRepoPaths) {
             const shouldPreserveMessage: boolean = syncProfile.repoPrivacies[repo] ?? true;
 
@@ -24,10 +24,10 @@ export async function runSync(syncProfile: SyncProfile) {
 
             await pushCommits(repo);
 
-            totalCommitsSync += commits.length;
+            commitsSynced += commits.length;
         }
 
-        await metricsRepository.addToTotalCommits(totalCommitsSync);
+        await SyncHistoryRepository.incrementCommitsSynced(commitsSynced);
     } catch (error) {
         console.log("Sync error: ", error);
         throw(error);
