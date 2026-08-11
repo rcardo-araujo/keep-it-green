@@ -7,7 +7,7 @@ import { SyncProfile } from "./models/SyncProfile";
 import { startSyncJob } from "./services/jobScheduler";
 import { SyncIntervals } from "./registry/SyncIntervals";
 import { runSync } from "./syncService";
-import { initializeMetricsDb } from "./databases/db";
+import { initSyncHistoryDb } from "./databases/db";
 import { getDashboardStats } from "./dashboardService";
 
 function createWindow(): void {
@@ -68,7 +68,7 @@ app.whenReady().then(async () => {
     });
 
     try {
-        await initializeMetricsDb();
+        await initSyncHistoryDb();
         
         console.log("Metrics database initialized");
     } catch (error) {
