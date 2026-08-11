@@ -70,9 +70,9 @@ app.whenReady().then(async () => {
     try {
         await initSyncHistoryDb();
         
-        console.log("Metrics database initialized");
+        console.log("Sync History database initialized");
     } catch (error) {
-        console.error("Error at loading Metrics database: ", error);
+        console.error("Error at loading Sync History database: ", error);
         throw(error);
     }
 

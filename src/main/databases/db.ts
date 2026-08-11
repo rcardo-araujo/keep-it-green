@@ -1,5 +1,5 @@
 import { defaultSyncHistory, SyncHistory } from "./schemas";
-import { METRICS_DB_PATH } from "../utils/paths";
+import { SYNC_HISTORY_DB_PATH } from "../utils/paths";
 
 import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
@@ -7,7 +7,7 @@ import { JSONFile } from "lowdb/node";
 let SyncHistoryDb: Low<SyncHistory> | null = null;
 
 export async function initSyncHistoryDb() {
-    const adapter = new JSONFile<SyncHistory>(METRICS_DB_PATH);
+    const adapter = new JSONFile<SyncHistory>(SYNC_HISTORY_DB_PATH);
     SyncHistoryDb = new Low<SyncHistory>(adapter, defaultSyncHistory);
 
     await SyncHistoryDb.read();
