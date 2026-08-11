@@ -1,4 +1,4 @@
-import { DashboardStats } from "../../../main/models/DashboardStats.ts"
+import { DashboardStats } from "../../../main/models/DashboardStats"
 
 import { useEffect, useState } from "react";
 

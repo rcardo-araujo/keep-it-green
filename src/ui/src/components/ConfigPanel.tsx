@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { SyncProfile } from "../../../main/models/SyncProfile";
 
 interface ConfigPanelProps {

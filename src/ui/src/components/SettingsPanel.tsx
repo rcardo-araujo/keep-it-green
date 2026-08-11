@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { SyncProfile } from "../../../main/models/SyncProfile";
 
 export default function SettingsPanel() {
