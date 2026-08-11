@@ -1,6 +1,6 @@
 import { getSyncProfile } from "./configManager";
-import { SyncHistoryRepository } from "./databases/db";
-import { createEmptyDashboardStats, DashboardStats } from "./models/DashboardStats";
+import { SyncHistoryRepository } from "../databases/db";
+import { createEmptyDashboardStats, DashboardStats } from "../models/DashboardStats";
 
 export async function getDashboardStats(): Promise<DashboardStats> {
     const stats = createEmptyDashboardStats();

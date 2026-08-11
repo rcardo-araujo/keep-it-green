@@ -1,6 +1,6 @@
-import { CommitData } from "./models/CommitData";
-import { LanguageProfile } from "./models/LanguageProfile";
-import { SupportedLanguages } from "./registry/SupportedLanguages";
+import { CommitData } from "../models/CommitData";
+import { LanguageProfile } from "../models/LanguageProfile";
+import { SupportedLanguages } from "../registry/SupportedLanguages";
 
 import * as fs from "fs/promises";
 import * as path from "path";
@@ -33,6 +33,6 @@ async function leaveFootprints(language: string, repository: string, quantity: n
 
 export async function leaveCommitFootprints(commit: CommitData, repository: string): Promise<void> {
     for (const [language, quantity] of Object.entries(commit.insertions)) {
-        await leaveFootprints(language, repository, quantity);
+        await leaveFootprints(language, repository, quantity as number);
     }
 }

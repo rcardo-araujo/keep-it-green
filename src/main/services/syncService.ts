@@ -1,7 +1,7 @@
-import { SyncProfile } from "./models/SyncProfile";
+import { SyncProfile } from "../models/SyncProfile";
 import { leaveCommitFootprints } from "./footprintService";
 import { createCommit, fetchCommits, pushCommits, stageChanges } from "./gitClient";
-import { SyncHistoryRepository } from "./databases/db";
+import { SyncHistoryRepository } from "../databases/db";
 
 let isSyncing = false;
 

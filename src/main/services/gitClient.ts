@@ -1,5 +1,5 @@
-import { CommitData } from "./models/CommitData";
-import { LanguageFileExtentions } from "./registry/LanguageFileExtentions";
+import { CommitData } from "../models/CommitData";
+import { LanguageFileExtentions } from "../registry/LanguageFileExtentions";
 
 import { exec } from "child_process";
 import { promisify } from "util"; 

@@ -1,5 +1,5 @@
-import { getSyncProfile } from "../configManager";
-import { runSync } from "../syncService";
+import { getSyncProfile } from "./configManager";
+import { runSync } from "./syncService";
 
 let syncTimer: NodeJS.Timeout | null = null;
 

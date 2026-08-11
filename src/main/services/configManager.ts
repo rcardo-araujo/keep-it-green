@@ -1,5 +1,5 @@
-import { createEmptySyncProfile, SyncProfile } from "./models/SyncProfile";
-import { SYNC_PROFILE_PATH } from "./utils/paths";
+import { SyncProfile, createEmptySyncProfile } from "../models/SyncProfile";
+import { SYNC_PROFILE_PATH } from "../utils/paths";
 
 import * as fs from "fs";
 

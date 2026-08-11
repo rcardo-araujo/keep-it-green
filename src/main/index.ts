@@ -2,13 +2,13 @@ import { app, shell, BrowserWindow, ipcMain, dialog } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
-import { getSyncProfile, saveSyncProfile } from "./configManager";
+import { getSyncProfile, saveSyncProfile } from "./services/configManager";
 import { SyncProfile } from "./models/SyncProfile";
 import { startSyncJob } from "./services/jobScheduler";
 import { SyncIntervals } from "./registry/SyncIntervals";
-import { runSync } from "./syncService";
+import { runSync } from "./services/syncService";
 import { initSyncHistoryDb } from "./databases/db";
-import { getDashboardStats } from "./dashboardService";
+import { getDashboardStats } from "./services/dashboardService";
 
 function createWindow(): void {
     // Create the browser window.
