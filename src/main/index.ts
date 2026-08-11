@@ -91,7 +91,7 @@ app.whenReady().then(async () => {
         throw(error);
     }
 
-    ipcMain.handle("saveSyncProfile", async (event, profile: SyncProfile) => {
+    ipcMain.handle("saveSyncProfile", async (_event, profile: SyncProfile) => {
         await saveSyncProfile(profile);
 
         const interval = SyncIntervals[profile.syncInterval];

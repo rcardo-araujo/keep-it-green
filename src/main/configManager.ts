@@ -37,19 +37,3 @@ export async function saveSyncProfile(profile: SyncProfile): Promise<void> {
     }
 }
 
-export async function updateLastSyncDate(): Promise<void> {
-    try {
-        const syncProfile = await getSyncProfile();
-        
-        const updatedSyncProfile = {
-            ...syncProfile,
-            lastSyncDate: new Date().toISOString()
-        }
-
-        const updatedSyncProfilePayload = JSON.stringify(updatedSyncProfile, null, 4);
-        await fs.promises.writeFile(SYNC_PROFILE_PATH, updatedSyncProfilePayload, "utf-8");
-    } catch(error) {
-        console.log("Updating last sync date error: ", error);
-        throw(error);
-    }
-}

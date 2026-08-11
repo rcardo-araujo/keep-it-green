@@ -20,10 +20,11 @@ export const SyncHistoryRepository = {
         return structuredClone(SyncHistoryDb.data);
     },
 
-    incrementCommitsSynced: async (count: number) => {
+    recordSyncRun: async (commitsCount: number) => {
         if (!SyncHistoryDb) throw new Error("Sync History database not initialized");
 
-        SyncHistoryDb.data.commitsSynced += count;
+        SyncHistoryDb.data.commitsSynced += commitsCount;
+        SyncHistoryDb.data.lastSyncDate = new Date().toISOString();
 
         try {
             await SyncHistoryDb.write();

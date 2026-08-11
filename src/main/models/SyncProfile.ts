@@ -2,8 +2,8 @@ export interface SyncProfile {
     authorEmail: string;
     destinationRepoPath: string;
     sourceRepoPaths: string[];
-    lastSyncDate: string;
     syncInterval: string;
+    initialSyncDate: string;
     repoPrivacies: Record<string, boolean>;
 }
 
@@ -12,8 +12,8 @@ export function createEmptySyncProfile(): SyncProfile {
         authorEmail: "",
         destinationRepoPath: "",
         sourceRepoPaths: [],
-        lastSyncDate: "",
         syncInterval: "",
+        initialSyncDate: "",
         repoPrivacies: {}
     };
 }

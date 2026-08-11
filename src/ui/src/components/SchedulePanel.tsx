@@ -3,7 +3,7 @@ import { SyncProfile } from "../../../main/models/SyncProfile";
 
 interface SchedulePanelProps {
     onBack?: () => void,
-    onNext?: (data: Pick<SyncProfile, "lastSyncDate" | "syncInterval">) => void
+    onNext?: (data: Pick<SyncProfile, "initialSyncDate" | "syncInterval">) => void
 }
 
 export default function SchedulePanel({ onBack, onNext }: SchedulePanelProps) {
@@ -18,7 +18,7 @@ export default function SchedulePanel({ onBack, onNext }: SchedulePanelProps) {
 
     const handleNext = () => {
         if (onNext) onNext({
-            lastSyncDate: sinceDate,
+            initialSyncDate: sinceDate,
             syncInterval: syncInterval
         });
     }

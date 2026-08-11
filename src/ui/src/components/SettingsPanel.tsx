@@ -7,7 +7,7 @@ export default function SettingsPanel() {
         destinationRepoPath: "",
         sourceRepoPaths: [],
         repoPrivacies: {},
-        lastSyncDate: "2026-06-01",
+        initialSyncDate: "2026-06-01",
         syncInterval: "daily"
     });
     
@@ -215,16 +215,16 @@ export default function SettingsPanel() {
                 
                 <div className="form-group">
                     <label>Start Syncing From</label>
-                    <input type="date" ref={sinceDateInputRef} value={profile.lastSyncDate || ""} onChange={(e) => handleChange("lastSyncDate", e.target.value)} style={{ width: 0, height: 0, opacity: 0, position: "absolute", zIndex: -1 }} />
+                    <input type="date" ref={sinceDateInputRef} value={profile.initialSyncDate || ""} onChange={(e) => handleChange("initialSyncDate", e.target.value)} style={{ width: 0, height: 0, opacity: 0, position: "absolute", zIndex: -1 }} />
                     <button type="button" onClick={() => sinceDateInputRef.current?.showPicker()} 
                         onMouseOver={(event) => (event.currentTarget.style.borderColor = "var(--accent-green)")}
                         onMouseOut={(event) => (event.currentTarget.style.borderColor = "var(--border-light)")}
-                        style={{ width: "100%", padding: "0.75rem 1rem", background: "var(--surface-bg)", border: profile.lastSyncDate ? "1px solid var(--border-light)" : "1px dashed var(--border-light)", borderRadius: "8px", height: "50px", color: "var(--text-primary)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "left", gap: "0.75rem", fontWeight: 500, fontSize: "0.95rem", transition: "all 0.2s ease" }}>
-                        <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "24px", height: "24px", color: profile.lastSyncDate ? "var(--accent-green)" : "var(--border-medium)", border: profile.lastSyncDate ? "1px solid var(--accent-green)" : "1px solid var(--border-medium)", background: profile.lastSyncDate ? "var(--accent-green-light)" : "transparent", borderRadius: "4px" }}>
+                        style={{ width: "100%", padding: "0.75rem 1rem", background: "var(--surface-bg)", border: profile.initialSyncDate ? "1px solid var(--border-light)" : "1px dashed var(--border-light)", borderRadius: "8px", height: "50px", color: "var(--text-primary)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "left", gap: "0.75rem", fontWeight: 500, fontSize: "0.95rem", transition: "all 0.2s ease" }}>
+                        <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "24px", height: "24px", color: profile.initialSyncDate ? "var(--accent-green)" : "var(--border-medium)", border: profile.initialSyncDate ? "1px solid var(--accent-green)" : "1px solid var(--border-medium)", background: profile.initialSyncDate ? "var(--accent-green-light)" : "transparent", borderRadius: "4px" }}>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         </span>
-                        <span style={{ flex: 1, textAlign: "left", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{profile.lastSyncDate || "Select Date"}</span>
-                        {profile.lastSyncDate && <div className="btn-remove" title="Clear date" onClick={(e) => { e.stopPropagation(); handleChange("lastSyncDate", ""); }} style={{ color: "var(--border-medium)", cursor: "pointer", padding: "0.2rem 0.5rem" }}>X</div>}
+                        <span style={{ flex: 1, textAlign: "left", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{profile.initialSyncDate || "Select Date"}</span>
+                        {profile.initialSyncDate && <div className="btn-remove" title="Clear date" onClick={(e) => { e.stopPropagation(); handleChange("initialSyncDate", ""); }} style={{ color: "var(--border-medium)", cursor: "pointer", padding: "0.2rem 0.5rem" }}>X</div>}
                     </button>
                 </div>
 
