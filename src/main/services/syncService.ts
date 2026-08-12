@@ -2,6 +2,7 @@ import { SyncProfile } from "../models/SyncProfile";
 import { leaveCommitFootprints } from "./footprintService";
 import { createCommit, fetchCommits, pushCommits, stageChanges } from "./gitClient";
 import { SyncHistoryRepository } from "../databases/db";
+import { GitError } from "../errors/GitError";
 
 let isSyncing = false;
 
@@ -36,8 +37,12 @@ export async function runSync(syncProfile: SyncProfile) {
                 await pushCommits(repo);
 
                 commitsSynced += commits.length;
-            } catch (error) {
-                console.warn(`Failed to sync repository ${repo}: `, error);
+            } catch (error: any) {
+                if (error instanceof GitError)
+                    console.warn(`[GIT ERROR] Syncronization failed for ${repo}. Reason: ${error.message}`);
+                else 
+                    console.error(`[FATAL] Unknown error in the repository ${repo}: `, error);
+
                 continue;
             }
         }
