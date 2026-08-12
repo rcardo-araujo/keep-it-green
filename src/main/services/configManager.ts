@@ -1,5 +1,6 @@
 import { SyncProfile, createEmptySyncProfile } from "../models/SyncProfile";
 import { SYNC_PROFILE_PATH } from "../utils/paths";
+import { ConfigError } from "../errors/ConfigError";
 
 import * as fs from "fs";
 
@@ -7,9 +8,13 @@ export function initializeUserData(): void {
     if (!fs.existsSync(SYNC_PROFILE_PATH)) {
         const defaultSyncProfile = createEmptySyncProfile();
 
-        fs.writeFileSync(SYNC_PROFILE_PATH, JSON.stringify(defaultSyncProfile, null, 4), "utf-8");
+        try {
+            fs.writeFileSync(SYNC_PROFILE_PATH, JSON.stringify(defaultSyncProfile, null, 4), "utf-8");
 
-        console.log("Sync profile file created");
+            console.info("[INFO] Sync profile file created");
+        } catch (error) {
+            throw new ConfigError("initializeUserData", { error });
+        }
     }
 }
 
@@ -21,8 +26,7 @@ export function getSyncProfile(): SyncProfile | null {
 
         return JSON.parse(syncProfile);
     } catch (error) {
-        console.log("Sync profile JSON is corrupted: ", error);
-        return null;
+        throw new ConfigError("getSyncProfile", { error, reason: "Sync profile JSON is corrupted" });
     }
 }
 
@@ -32,8 +36,7 @@ export async function saveSyncProfile(profile: SyncProfile): Promise<void> {
     try {
         await fs.promises.writeFile(SYNC_PROFILE_PATH, syncProfilePayload, "utf-8");
     } catch (error) {
-        console.log("Saving sync profile error: ", error);
-        throw(error);
+        throw new ConfigError("saveSyncProfile", { error });
     }
 }
 

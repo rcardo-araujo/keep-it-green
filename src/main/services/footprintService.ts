@@ -1,6 +1,7 @@
 import { CommitData } from "../models/CommitData";
 import { LanguageProfile } from "../models/LanguageProfile";
 import { SupportedLanguages } from "../registry/SupportedLanguages";
+import { AppError } from "../errors/AppError";
 
 import * as fs from "fs/promises";
 import * as path from "path";
@@ -13,8 +14,7 @@ async function appendFootprintsFile(languageProfile: LanguageProfile, repository
     try {
         await fs.appendFile(footprintsFilePath, footprintsPayload, "utf-8");
     } catch (error) {
-        console.log("TS footprints generation error: ", error);
-        throw(error);
+        throw new AppError(`Footprints generation error in ${repository}`, "FOOTPRINT_GENERATION_FAILED", error);
     }
 }
 
@@ -24,8 +24,8 @@ async function leaveFootprints(language: string, repository: string, quantity: n
     const languageProfile = SupportedLanguages[language];
 
     if (!languageProfile) {
-        console.log("Language not supported");
-        return
+        console.warn(`[WARN] Language not supported: ${language}`);
+        return;
     }
 
     return appendFootprintsFile(languageProfile, repository, quantity);
