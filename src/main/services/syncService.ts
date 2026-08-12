@@ -3,6 +3,8 @@ import { leaveCommitFootprints } from "./footprintService";
 import { createCommit, fetchCommits, pushCommits, stageChanges } from "./gitClient";
 import { SyncHistoryRepository } from "../databases/db";
 import { GitError } from "../errors/GitError";
+import { DatabaseError } from "../errors/DatabaseError";
+import { AppError } from "../errors/AppError";
 
 let isSyncing = false;
 
@@ -39,7 +41,7 @@ export async function runSync(syncProfile: SyncProfile) {
                 commitsSynced += commits.length;
             } catch (error: any) {
                 if (error instanceof GitError)
-                    console.warn(`[GIT ERROR] Syncronization failed for ${repo}. Reason: ${error.message}`);
+                    console.warn(`[GIT ERROR] Syncronization failed in the repository ${repo}. Reason: ${error.message}`);
                 else 
                     console.error(`[FATAL] Unknown error in the repository ${repo}: `, error);
 
@@ -48,9 +50,15 @@ export async function runSync(syncProfile: SyncProfile) {
         }
 
         await SyncHistoryRepository.recordSyncRun(commitsSynced);
-    } catch (error) {
-        console.log("Sync error: ", error);
-        throw(error);
+    } catch (error: any) {
+        if (error instanceof DatabaseError)
+            console.error(`[DATABASE FATAL] ${error.message}`, error.details);
+        else if (error instanceof AppError) 
+            console.error(`[APP FATAL] ${error.message}`);
+        else
+            console.error(`[FATAL] ${error.message}`, error.details);
+
+        throw error;
     } finally {
         isSyncing = false;
     }
