@@ -1,5 +1,6 @@
 import { CommitData } from "../models/CommitData";
 import { LanguageFileExtentions } from "../registry/LanguageFileExtentions";
+import { GitError } from "../errors/GitError";
 
 import { exec } from "child_process";
 import { promisify } from "util"; 
@@ -16,9 +17,8 @@ async function executeGitCommand(command: string, repository: string): Promise<s
         }
 
         return stdout;
-    } catch(error) {
-        console.log("Git error: ", error);
-        throw(error)
+    } catch(error: any) {
+        throw new GitError(repository, error.message)
     }
 }
 
