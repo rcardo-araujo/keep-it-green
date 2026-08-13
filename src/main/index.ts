@@ -70,14 +70,19 @@ app.whenReady().then(async () => {
     try {
         await initSyncHistoryDb();
         
-        console.log("Sync History database initialized");
+        console.info("[INFO] Sync History database initialized");
     } catch (error) {
-        console.error("Error at loading Sync History database: ", error);
-        throw(error);
+        console.error("[FATAL] Error at loading sync history database: ", error);
+        throw error;
     }
 
     ipcMain.handle("getSyncProfile", async () => {
-        return await getSyncProfile();
+        try {
+            return await getSyncProfile();
+        } catch (error) {
+            console.error("[IPC ERROR] Failed to get sync profile: ", error);
+            throw error;
+        }
     });
 
     try {
@@ -88,14 +93,20 @@ app.whenReady().then(async () => {
             startSyncJob(interval);
         }
     } catch (error) {
-        throw(error);
+        console.error("[FATAL] Failed to load sync profile on startup: ", error);
+        throw error;
     }
 
     ipcMain.handle("saveSyncProfile", async (_event, profile: SyncProfile) => {
-        await saveSyncProfile(profile);
+        try {
+            await saveSyncProfile(profile);
 
-        const interval = SyncIntervals[profile.syncInterval];
-        startSyncJob(interval);
+            const interval = SyncIntervals[profile.syncInterval];
+            startSyncJob(interval);
+        } catch (error) {
+            console.error("[IPC ERROR] Failed to save sync profile: ", error);
+            throw error;
+        }
     });
 
     ipcMain.handle("selectDirectory", async () => {
@@ -116,7 +127,8 @@ app.whenReady().then(async () => {
 
             if (profile !== null) await runSync(profile);
         } catch (error) {
-            throw(error);
+            console.error("[IPC ERROR] Failed to run sync manually: ", error);
+            throw error;
         }
     });
 
@@ -124,7 +136,8 @@ app.whenReady().then(async () => {
         try {
             return await getDashboardStats();
         } catch (error) {
-            throw(error);
+            console.error("[IPC ERROR] Failed to get dashboard stats: ", error);
+            throw error;
         }
     });
 });
