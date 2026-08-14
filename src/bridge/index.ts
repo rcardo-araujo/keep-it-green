@@ -9,7 +9,7 @@ const api = {
     selectDirectory: () => ipcRenderer.invoke("selectDirectory"),
     sync: () => ipcRenderer.invoke("sync"),
     getDashboardStats: () => ipcRenderer.invoke("getDashboardStats"),
-    checkRepositoryPermissions: (repoPath: string) => ipcRenderer.invoke("checkRepositoryPermissions", repoPath)
+    checkRepoPermissions: (repoPath: string) => ipcRenderer.invoke("checkRepoPermissions", repoPath)
 };
 
 if (process.contextIsolated) {

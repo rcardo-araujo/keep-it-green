@@ -122,13 +122,13 @@ app.whenReady().then(async () => {
         return result.filePaths[0];
     });
 
-    ipcMain.handle("checkRepositoryPermissions", async (_event, repoPath: string) => {
+    ipcMain.handle("checkRepoPermissions", async (_event, repoPath: string) => {
         try {
             await checkPushPermission(repoPath);
             return { success: true };
         } catch (error: any) {
             console.warn(`[PRE-FLIGHT CHECK] Repository ${repoPath} rejected: ${error.message}`);
-            return { success: false, errorMessage: error.message };
+            return { success: false, error: error.message };
         }
     });
 

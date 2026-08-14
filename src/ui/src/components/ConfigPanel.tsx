@@ -11,7 +11,10 @@ interface ConfigPanelProps {
 
 export default function ConfigPanel({ onNext }: ConfigPanelProps) {
     const [email, setEmail] = useState("");
+
     const [destinationRepo, setDestinationRepo] = useState("");
+    const [isCheckingRepoPermission, setIsCheckingRepoPermission] = useState(false);
+    const [repoPermissionCheckError, setRepoPermissionCheckError] = useState("");
 
     const [sourceRepos, setSourceRepos] = useState<string[]>([]);
     const [isListCollapsed, setIsListCollapsed] = useState(true);
@@ -34,10 +37,22 @@ export default function ConfigPanel({ onNext }: ConfigPanelProps) {
     const handleSelectDestinationRepo = async () => {
         // @ts-ignore
         const selectedDirectory = await window.api.selectDirectory();
+        if (!selectedDirectory) return;
 
-        if (selectedDirectory) {
-            setDestinationRepo(selectedDirectory);
+        setIsCheckingRepoPermission(true);
+
+        // @ts-ignore
+        const result = await window.api.checkRepoPermissions(selectedDirectory);
+
+        setIsCheckingRepoPermission(false);
+
+        if (!result.success) {
+            setRepoPermissionCheckError(result.error);
+            return;
         }
+
+        setRepoPermissionCheckError("");
+        setDestinationRepo(selectedDirectory);
     }
 
     const handleAddSourceRepo = async () => {
