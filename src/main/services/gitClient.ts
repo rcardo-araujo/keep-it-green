@@ -22,6 +22,11 @@ async function executeGitCommand(command: string, repository: string): Promise<s
     }
 }
 
+export async function checkPushPermission(repository: string): Promise<void> {
+    const command = `git push --dry-run`;
+    await executeGitCommand(command, repository);
+}
+
 export async function stageChanges(repository: string): Promise<void> {
     const command = `git add .`;
     await executeGitCommand(command, repository);

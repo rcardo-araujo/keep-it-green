@@ -9,6 +9,7 @@ import { SyncIntervals } from "./registry/SyncIntervals";
 import { runSync } from "./services/syncService";
 import { initSyncHistoryDb } from "./databases/db";
 import { getDashboardStats } from "./services/dashboardService";
+import { checkPushPermission } from "./services/gitClient";
 
 function createWindow(): void {
     // Create the browser window.
@@ -119,6 +120,16 @@ app.whenReady().then(async () => {
         }
 
         return result.filePaths[0];
+    });
+
+    ipcMain.handle("checkRepositoryPermissions", async (_event, repoPath: string) => {
+        try {
+            await checkPushPermission(repoPath);
+            return { success: true };
+        } catch (error: any) {
+            console.warn(`[PRE-FLIGHT CHECK] Repository ${repoPath} rejected: ${error.message}`);
+            return { success: false, errorMessage: error.message };
+        }
     });
 
     ipcMain.handle("sync", async () => {
