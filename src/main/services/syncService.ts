@@ -36,8 +36,6 @@ export async function runSync(syncProfile: SyncProfile) {
                     await createCommit(syncProfile.destinationRepoPath, commit.message, commit.date);
                 }
 
-                await pushCommits(repo);
-
                 commitsSynced += commits.length;
             } catch (error: any) {
                 if (error instanceof GitError)
@@ -47,6 +45,10 @@ export async function runSync(syncProfile: SyncProfile) {
 
                 continue;
             }
+        }
+
+        if (commitsSynced > 0) {
+            await pushCommits(syncProfile.destinationRepoPath);
         }
 
         await SyncHistoryRepository.recordSyncRun(commitsSynced);
