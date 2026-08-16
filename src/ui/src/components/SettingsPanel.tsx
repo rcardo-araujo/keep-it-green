@@ -15,6 +15,9 @@ export default function SettingsPanel() {
     const [saveSuccess, setSaveSuccess] = useState(false);
     const sinceDateInputRef = useRef<HTMLInputElement>(null);
 
+    const [isCheckingRepoPermission, setIsCheckingRepoPermission] = useState(false);
+    const [repoPermissionCheckError, setRepoPermissionCheckError] = useState("");
+
     useEffect(() => {
         async function loadConfig() {
             try {
@@ -37,9 +40,22 @@ export default function SettingsPanel() {
     const handleSelectDestinationRepo = async () => {
         // @ts-ignore
         const selectedDirectory = await window.api.selectDirectory();
-        if (selectedDirectory) {
-            handleChange("destinationRepoPath", selectedDirectory);
+        if (!selectedDirectory) return;
+
+        setIsCheckingRepoPermission(true);
+
+        // @ts-ignore
+        const result = await window.api.checkRepoPermissions(selectedDirectory);
+
+        setIsCheckingRepoPermission(false);
+
+        if (!result.success) {
+            setRepoPermissionCheckError(result.error);
+            return;
         }
+
+        setRepoPermissionCheckError("");
+        handleChange("destinationRepoPath", selectedDirectory);
     }
 
     const handleAddSourceRepo = async () => {
@@ -120,12 +136,15 @@ export default function SettingsPanel() {
                     <button
                         type="button"
                         onClick={handleSelectDestinationRepo}
-                        onMouseOver={(event) => (event.currentTarget.style.borderColor = "var(--accent-green)")}
-                        onMouseOut={(event) => (event.currentTarget.style.borderColor = "var(--border-light)")}
+                        disabled={isCheckingRepoPermission}
+                        onMouseOver={(event) => !isCheckingRepoPermission && (event.currentTarget.style.borderColor = "var(--accent-green)")}
+                        onMouseOut={(event) => !isCheckingRepoPermission && (event.currentTarget.style.borderColor = "var(--border-light)")}
                         style={{
                             width: "100%", padding: "0.75rem 1rem", background: "var(--surface-bg)",
                             border: profile.destinationRepoPath ? "1px solid var(--border-light)" : "1px dashed var(--border-light)",
-                            borderRadius: "8px", height: "50px", color: "var(--text-primary)", cursor: "pointer",
+                            borderRadius: "8px", height: "50px", color: "var(--text-primary)", 
+                            cursor: isCheckingRepoPermission ? "not-allowed" : "pointer",
+                            opacity: isCheckingRepoPermission ? 0.7 : 1,
                             display: "flex", alignItems: "center", justifyContent: "left", gap: "0.75rem",
                             fontWeight: 500, fontSize: "0.95rem", transition: "all 0.2s ease"
                         }}
@@ -137,21 +156,46 @@ export default function SettingsPanel() {
                             background: profile.destinationRepoPath ? "var(--accent-green-light)" : "transparent",
                             borderRadius: "4px"
                         }}>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                            </svg>
+                            {isCheckingRepoPermission ? (
+                                <svg className="spinner-anim" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                                </svg>
+                            ) : (
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            )}
                         </span>
                         
                         <span style={{ flex: 1, textAlign: "left", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>
-                            {profile.destinationRepoPath || "Select Repository"}
+                            {isCheckingRepoPermission ? "Verifying Git permissions..." : (profile.destinationRepoPath || "Select Repository")}
                         </span>
 
-                        {profile.destinationRepoPath && (
+                        {profile.destinationRepoPath && !isCheckingRepoPermission && (
                             <div className="btn-remove" title="Clear selection" onClick={(e) => { e.stopPropagation(); handleChange("destinationRepoPath", ""); }} style={{ color: "var(--border-medium)", padding: "0.2rem 0.5rem" }}>
                                 X
                             </div>
                         )}
                     </button>
+                    
+                    {repoPermissionCheckError && (
+                        <div style={{
+                            marginTop: "0.75rem", padding: "0.85rem", background: "rgba(220, 38, 38, 0.1)",
+                            border: "1px solid rgba(220, 38, 38, 0.3)", borderRadius: "8px", color: "#ef4444",
+                            fontSize: "0.85rem", lineHeight: "1.4"
+                        }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.3rem", fontWeight: 600 }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                Git Push Failed
+                            </div>
+                            {repoPermissionCheckError}
+                            <div style={{ marginTop: "0.5rem", color: "var(--text-secondary)", fontSize: "0.8rem" }}>
+                                Make sure this folder is a valid Git repository with a configured remote origin and that you have SSH/HTTPS credentials set up on your machine.
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
