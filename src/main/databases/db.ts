@@ -13,8 +13,9 @@ export async function initSyncHistoryDb() {
 
     try {
         await SyncHistoryDb.read();
+        await SyncHistoryDb.write();
     } catch (error) {
-        throw new DatabaseError("initSyncHistoryDb (read)", { error });
+        throw new DatabaseError("initSyncHistoryDb", { error });
     }
 }
 
