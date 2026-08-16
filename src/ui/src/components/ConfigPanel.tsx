@@ -123,6 +123,7 @@ export default function ConfigPanel({ onNext }: ConfigPanelProps) {
                 <button
                     type="button"
                     onClick={handleSelectDestinationRepo}
+                    disabled={isCheckingRepoPermission}
                     style={{
                         width: "100%",
                         padding: "0.75rem 1rem",
@@ -131,7 +132,8 @@ export default function ConfigPanel({ onNext }: ConfigPanelProps) {
                         borderRadius: "8px",
                         height: "50px",
                         color: "var(--text-primary)", 
-                        cursor: "pointer",
+                        cursor: isCheckingRepoPermission ? "not-allowed" : "pointer",
+                        opacity: isCheckingRepoPermission ? 0.7 : 1,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "left",
@@ -141,9 +143,9 @@ export default function ConfigPanel({ onNext }: ConfigPanelProps) {
                         transition: "all 0.2s ease"
                     }}
                     onMouseOver={(event) =>
-                        (event.currentTarget.style.borderColor = "var(--accent-green)")
+                        !isCheckingRepoPermission && (event.currentTarget.style.borderColor = "var(--accent-green)")
                     }
-                    onMouseOut={(event) => (event.currentTarget.style.borderColor = "var(--border-light)")}
+                    onMouseOut={(event) => !isCheckingRepoPermission && (event.currentTarget.style.borderColor = "var(--border-light)")}
                 >
                     <span
                         style={{
@@ -158,9 +160,15 @@ export default function ConfigPanel({ onNext }: ConfigPanelProps) {
                             borderRadius: "4px"
                         }}
                     >
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                        </svg>
+                        {isCheckingRepoPermission ? (
+                            <svg className="spinner-anim" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                            </svg>
+                        ) : (
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        )}
                     </span>
                     
                     <span style={{ 
@@ -170,10 +178,10 @@ export default function ConfigPanel({ onNext }: ConfigPanelProps) {
                         whiteSpace: "nowrap",
                         overflow: "hidden" 
                     }}>
-                        {destinationRepo ? destinationRepo : "Select Repository"}
+                        {isCheckingRepoPermission ? "Verifying Git permissions..." : (destinationRepo ? destinationRepo : "Select Repository")}
                     </span>
 
-                    {destinationRepo && (
+                    {destinationRepo && !isCheckingRepoPermission && (
                         <div
                             className="btn-remove"
                             title="Clear selection"
@@ -191,6 +199,32 @@ export default function ConfigPanel({ onNext }: ConfigPanelProps) {
                         </div>
                     )}
                 </button>
+
+                {repoPermissionCheckError && (
+                    <div style={{
+                        marginTop: "0.75rem",
+                        padding: "0.85rem",
+                        background: "rgba(220, 38, 38, 0.1)",
+                        border: "1px solid rgba(220, 38, 38, 0.3)",
+                        borderRadius: "8px",
+                        color: "#ef4444",
+                        fontSize: "0.85rem",
+                        lineHeight: "1.4"
+                    }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.3rem", fontWeight: 600 }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            Git Push Failed
+                        </div>
+                        {repoPermissionCheckError}
+                        <div style={{ marginTop: "0.5rem", color: "var(--text-secondary)", fontSize: "0.8rem" }}>
+                            Make sure this folder is a valid Git repository with a configured remote origin and that you have SSH/HTTPS credentials set up on your machine.
+                        </div>
+                    </div>
+                )}
             </div>
             <div className="form-group">
                 <label>Source Repositories</label>
